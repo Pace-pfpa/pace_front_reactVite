@@ -13,6 +13,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import logo from '../assets/pace.png';
+import logodopace from '../assets/logodopace.png'
 
 
 const drawerWidth = 240;
@@ -22,9 +24,11 @@ export const Home = () => {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#517085' }}>
-        <Toolbar>   
+        <Toolbar>
+          <img src={logodopace} alt="Logo do Pace" style={{ width: '50px', height: 'auto', marginRight: '10px' }}></img>
+          <img src={logo} alt="Logo do Pace" style={{ width: '50px', height: 'auto', marginRight: '10px' }}></img>
           <Typography variant="h6" noWrap component="div">
-            Pace - Programa de Agendamento e Controle de Escalas
+            Programa de Agendamento e Controle de Escalas
           </Typography>
         </Toolbar>
       </AppBar>
