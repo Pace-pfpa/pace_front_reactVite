@@ -28,7 +28,7 @@ export const Home = () => {
           <img src={logodopace} alt="Logo do Pace" style={{ width: '50px', height: 'auto', marginRight: '10px' }}></img>
           <img src={logo} alt="Logo do Pace" style={{ width: '50px', height: 'auto', marginRight: '10px' }}></img>
           <Typography variant="h6" noWrap component="div">
-            Programa de Agendamento e Controle de Escalas
+            - Programa de Agendamento e Controle de Escalas
           </Typography>
         </Toolbar>
       </AppBar>
