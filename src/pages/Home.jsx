@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { Box, Typography, Grid, Card, CardContent, CardHeader } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -43,6 +44,22 @@ const download = () => {
   link.click();
   document.body.removeChild(link);
 };
+
+const TabelaPautista = () => {
+  const [procuradores, setProcuradores] = useState([]);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(baseURL + 'pauta/total');
+        const data = await response.json();
+        setProcuradores(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
 
 export const Home = () => {
   return (
@@ -96,6 +113,9 @@ export const Home = () => {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
+
+
+
         <Typography paragraph>
           <Button variant="contained" onClick={download} startIcon={<CloudDownloadIcon />}> Download Relatório </Button>
           <br/>
@@ -106,7 +126,30 @@ export const Home = () => {
             <CustomCard title="Mutirões" value="0" color="success" />
             <CustomCard title="Pautista" value="0" color="info" />
           </Grid>
-          
+
+            <div>
+              <Table bordered>
+                <thead className="table-success">
+                  <tr>
+                    <th style={{ paddingRight: '20px' }}>PAUTISTAS</th>
+                    <th>QUANTIDADE DE AUDIÊNCIAS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>TODOS</td>
+                    <td>{procuradores.length > 0 && procuradores[0].saldo}</td>
+                  </tr>
+                  {procuradores.map((procurador, index) => (
+                    <tr key={index}>
+                      <td>{procurador.nome}</td>
+                      <td>{procurador.saldo}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+
         </Typography>
 
         
