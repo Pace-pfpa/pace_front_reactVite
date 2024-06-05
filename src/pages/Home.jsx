@@ -18,6 +18,9 @@ import logodopace from '../assets/logodopace.png';
 import Button from '@mui/material/Button';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { baseURL } from '../config/index';
+import axios from 'axios';
+import TabelaPautista from '../components/TabelaPautista';
+import { TabelaPautistaContainer } from '../services/TabelaPautistaContainer';
 
 
 const drawerWidth = 240;
@@ -44,52 +47,6 @@ const download = () => {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-};
-
-const TabelaPautista = () => {
-  const [procuradores, setProcuradores] = useState([]);
-  const [maxElements, setMaxElements] = useState(0);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(baseURL + 'pauta/total', { method: 'GET' });
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const maxElements = response.headers.get('maxElements');
-        setMaxElements(maxElements);
-        const data = await response.json();
-        setProcuradores(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  return (
-    <table className='table'>
-      <thead id='theadPautista'>
-        <tr className='table-success'>
-          <th style={{ paddingRight: '20px' }} scope="col">PAUTISTAS</th>
-          <th scope="col">QUANTIDADE DE AUDIÊNCIAS</th>
-        </tr>
-      </thead>
-      <tbody id='tbodyPautista'>
-        <tr>
-          <td>TODOS</td>
-          <td>{maxElements}</td>
-        </tr>
-        {procuradores.map((obj, i) => (
-          <tr key={i}>
-            <td>{obj.nome}</td>
-            <td>{obj.quantidade}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
 };
 
   export const Home = () => {
@@ -148,6 +105,7 @@ const TabelaPautista = () => {
           <Typography paragraph>
             <Button variant="contained" onClick={download} startIcon={<CloudDownloadIcon />}> Download Relatório </Button>
             <br/>
+            <br/>
             Relatório
             
             <Grid container spacing={3}>
@@ -155,8 +113,8 @@ const TabelaPautista = () => {
               <CustomCard title="Mutirões" value="0" color="success" />
               <CustomCard title="Pautista" value="0" color="info" />
             </Grid>
-
-            <TabelaPautista />
+              <br/>
+            <TabelaPautistaContainer />
             
           </Typography>
           
