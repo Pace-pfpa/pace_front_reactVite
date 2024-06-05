@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Box, Typography, Grid, Card, CardContent, CardHeader } from '@mui/material';
+import { Box, Typography, Grid } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,28 +17,11 @@ import logo from '../assets/pace.png';
 import logodopace from '../assets/logodopace.png';
 import Button from '@mui/material/Button';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import { baseURL } from '../config/index';
-import axios from 'axios';
-import TabelaPautista from '../components/TabelaPautista';
 import { TabelaPautistaContainer } from '../services/TabelaPautistaContainer';
+import { CustomCard } from '../components/CustomCard';
 
 
 const drawerWidth = 240;
-
-const CustomCard = ({ title, value, color }) => {
-  return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Card sx={{ height: '100%', borderLeft: `5px solid pink`, borderRadius: 'none' }} elevation={3}>
-        <CardHeader
-          title={<Typography variant="h6" sx={{ color: color }}>{title}</Typography>}
-        />
-        <CardContent>
-          <Typography variant="h5" sx={{ color: color }}>{value}</Typography>
-        </CardContent>
-      </Card>
-    </Grid>
-  )
-}
 
 const download = () => {
   const link = document.createElement('a');
