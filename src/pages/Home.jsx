@@ -19,6 +19,8 @@ import Button from '@mui/material/Button';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { TabelaPautistaContainer } from '../services/TabelaPautistaContainer';
 import { CustomCard } from '../components/CustomCard';
+import { getMutiraoCount } from '../services/CustomCard';
+import { getPautistaCount } from '../services/CustomCard';
 
 
 const drawerWidth = 240;
@@ -33,6 +35,25 @@ const download = () => {
 };
 
   export const Home = () => {
+    const [mutiraoCount, setMutiraoCount] = useState(0)
+    const [pautistaCount, setPautistaCount] = useState(0)
+
+    useEffect(() => {
+      const fetchCounts = async () => {
+        try {
+          const mutiraoCount = await getMutiraoCount();
+          const pautistaCount = await getPautistaCount();
+          setMutiraoCount(mutiraoCount);
+          setPautistaCount(pautistaCount)
+
+        } catch (err) {
+          console.error('Erro ao renderizar dados:', err);
+        }
+      };
+
+      fetchCounts();
+    }, []);
+
     return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
@@ -93,8 +114,8 @@ const download = () => {
             
             <Grid container spacing={3}>
               <CustomCard title="Varas" value="35" color="primary" />
-              <CustomCard title="Mutirões" value="0" color="success" />
-              <CustomCard title="Pautista" value="0" color="info" />
+              <CustomCard title="Mutirões" value={mutiraoCount} color="success" />
+              <CustomCard title="Pautista" value={pautistaCount} color="info" />
             </Grid>
               <br/>
             <TabelaPautistaContainer />

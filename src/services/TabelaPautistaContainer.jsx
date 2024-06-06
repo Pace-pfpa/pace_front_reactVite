@@ -28,7 +28,7 @@ export const TabelaPautistaContainer = () => {
 
         setProcuradores(lista);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Erro ao pegar procuradores:', error);
       }
     };
 
