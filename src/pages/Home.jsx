@@ -1,4 +1,5 @@
 import * as React from 'react';
+import style from '../Style/HomeStyle.module.css'
 import { useState, useEffect } from 'react';
 import { Box, Typography, Grid } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
@@ -104,15 +105,13 @@ const download = () => {
           </Box>
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <Toolbar />
+          <Toolbar sx={{ mb: 2 }}/>
   
-          <Typography paragraph>
-            <Button variant="contained" onClick={download} startIcon={<CloudDownloadIcon />}> Download Relatório </Button>
-            <br/>
-            <br/>
+          <Typography paragraph variant='h6' component="div" sx={{ fontSize: '1.6rem', mb: 3 }}>
             Relatório
+            <Button sx={{ mb: 3, marginLeft: '20px' }} variant="contained" onClick={download} startIcon={<CloudDownloadIcon />}> Download Relatório </Button>
             
-            <Grid container spacing={3}>
+            <Grid container spacing={3} sx={{ mb: 3 }}>
               <CustomCard title="Varas" value="35" color="primary" />
               <CustomCard title="Mutirões" value={mutiraoCount} color="success" />
               <CustomCard title="Pautista" value={pautistaCount} color="info" />

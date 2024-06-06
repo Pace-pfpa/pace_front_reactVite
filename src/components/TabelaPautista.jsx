@@ -31,13 +31,14 @@ export default function TabelaPautista({ columns, rows, total }) {
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{ minWidth: column.minWidth }}
+                    style={{ minWidth: column.minWidth, fontSize: '1.1rem', backgroundColor: '#bff0de', color: '#666666' }}
                   >
                     {column.label}
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
+
             <TableBody>
               <TableRow>
                 <TableCell>TODOS</TableCell>
@@ -45,9 +46,11 @@ export default function TabelaPautista({ columns, rows, total }) {
               </TableRow>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
+                .map((row, index) => {
+                  const isEvenRow = index % 2 === 0;
+                  const rowStyle = isEvenRow ? { backgroundColor: '#e0e8e7' } : {};
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.nome}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.nome} style={rowStyle}>
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (
