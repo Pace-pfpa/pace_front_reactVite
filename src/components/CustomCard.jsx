@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Typography, Grid, Card, CardContent, CardHeader } from '@mui/material';
+import axios from 'axios';
+import { baseURL } from '../config/index'
 
 export const CustomCard = ({ title, value, color }) => {
     return (
@@ -14,4 +16,27 @@ export const CustomCard = ({ title, value, color }) => {
         </Card>
       </Grid>
     )
+};
+
+  export const Home = () => {
+    const [mutirao, setMutirao] = React.useState(0);
+
+    React.useEffect(() => {
+        const getMutirao = async () => {
+            try{
+                const response = await axios.get(baseURL + 'mutirao/');
+                setMutiraoCount(response.data.length);
+            } catch(err){
+                console.error('Erro ao renderizar mutirão:', err);
+            }
+        };
+
+        getMutirao();
+  }, []);
+
+  return (
+    <div>
+        <CustomCard title="Mutirões" value={mutiraoCount} color="primary"/>
+    </div>
+  )
 };
