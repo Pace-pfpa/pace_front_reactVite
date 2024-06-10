@@ -10,7 +10,7 @@ export const Appbar = () => {
         <img src={logodopace} alt="Logo do Pace" style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
         <img src={logo} alt="Logo do Pace" style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
         <Typography variant="h6" noWrap component="div">
-         Header - Programa de Agendamento e Controle de Escalas
+          - Programa de Agendamento e Controle de Escalas
         </Typography>
       </Toolbar>
     </AppBar>

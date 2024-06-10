@@ -17,6 +17,7 @@ export const Sidebar = ({ openItems, exibirSubItens, activeItem, setActiveItem }
     const navigate = useNavigate();
 
     const handleNavigation = (path) => {
+        console.log(path)
         setActiveItem(path)
         navigate(path)
     }

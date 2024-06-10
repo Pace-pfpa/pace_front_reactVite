@@ -26,7 +26,7 @@ const download = () => {
       Mutirão: false,
       Consulta: false
     });
-    const [activeItem, setActiveItem] = useState('Home')
+    const [activeItem, setActiveItem] = useState('Home');
 
     useEffect(() => {
       const fetchCounts = async () => {
