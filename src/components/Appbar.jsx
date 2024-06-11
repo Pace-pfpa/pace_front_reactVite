@@ -1,60 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, Grid, Button, CssBaseline, Toolbar } from '@mui/material';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import { TabelaPautistaContainer } from '../services/TabelaPautistaContainer';
-import { CustomCard } from '../components/CustomCard';
-import { getMutiraoCount, getPautistaCount } from '../services/CustomCard';
-import { Sidebar } from '../components/Sidebar';
-import { Appbar } from '../components/Appbar';
+import React from 'react';
+import logo from '../assets/logodopace.png'
+import logoPace from '../assets/pace.png'
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 
-const download = () => {
-  const link = document.createElement('a');
-  link.href = '';
-  link.download = 'RelatorioPace.pdf';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
-export const Home = () => {
-  const [mutiraoCount, setMutiraoCount] = useState(0);
-  const [pautistaCount, setPautistaCount] = useState(0);
-
-  useEffect(() => {
-    const fetchCounts = async () => {
-      try {
-        const mutiraoCount = await getMutiraoCount();
-        const pautistaCount = await getPautistaCount();
-        setMutiraoCount(mutiraoCount);
-        setPautistaCount(pautistaCount);
-      } catch (err) {
-        console.error('Erro ao renderizar dados:', err);
-      }
-    };
-
-    fetchCounts();
-  }, []);
-
+export const Appbar = () => {
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <Appbar />
-      <Sidebar />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar sx={{ mb: 2 }} />
-        <Typography paragraph variant='h6' component="div" sx={{ fontSize: '1.6rem', mb: 3 }}>
-          Relatório
+    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#517085' }}>
+      <Toolbar>
+        <img src={logo} alt="Logo do Pace" style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
+        <img src={logoPace} alt="Logo" style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
+        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          - Programa de Agendamento e Controle de Escalas
         </Typography>
-        <Button sx={{ mb: 3, marginLeft: '20px' }} variant="contained" onClick={download} startIcon={<CloudDownloadIcon />}>
-          Download Relatório
-        </Button>
-        <Grid container spacing={3} sx={{ mb: 3 }}>
-          <CustomCard title="Varas" value="35" color="primary" />
-          <CustomCard title="Mutirões" value={mutiraoCount} color="success" />
-          <CustomCard title="Pautista" value={pautistaCount} color="info" />
-        </Grid>
-        <TabelaPautistaContainer />
-      </Box>
-    </Box>
+        <Button color="inherit">Login</Button>
+      </Toolbar>
+    </AppBar>
   );
 };
+
+

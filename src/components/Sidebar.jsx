@@ -52,7 +52,7 @@ export const Sidebar = () => {
           <List>
             {['Home'].map((text) => (
               <ListItem key={text} disablePadding>
-                <ListItemButton onClick={() => handleNavigation(`/${text.toLowerCase()}`)}>
+                <ListItemButton onClick={() => handleNavigation(`/`)}>
                   <ListItemIcon>
                     {iconMapping[text]}
                   </ListItemIcon>
