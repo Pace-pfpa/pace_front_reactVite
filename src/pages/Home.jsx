@@ -20,13 +20,6 @@ const download = () => {
   export const Home = () => {
     const [mutiraoCount, setMutiraoCount] = useState(0)
     const [pautistaCount, setPautistaCount] = useState(0)
-    const [openItems, setOpenItems] = useState({
-      Cadastro: false,
-      Escala: false,
-      Mutirão: false,
-      Consulta: false
-    });
-    const [activeItem, setActiveItem] = useState('Home');
 
     useEffect(() => {
       const fetchCounts = async () => {
@@ -44,18 +37,11 @@ const download = () => {
       fetchCounts();
     }, []);
 
-    const exibirSubItens = (item) => {
-    setOpenItems((prevOpenItems) => ({
-      ...prevOpenItems,
-      [item]: !prevOpenItems[item],
-    }));
-  };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Appbar />
-      <Sidebar openItems={openItems} exibirSubItens={exibirSubItens} activeItem={activeItem} setActiveItem={setActiveItem} />
+      <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar sx={{ mb: 2 }} />
         <Typography paragraph variant='h6' component="div" sx={{ fontSize: '1.6rem', mb: 3 }}>

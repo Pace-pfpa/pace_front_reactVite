@@ -1,53 +1,42 @@
-import React from 'react'
-import { Box, Typography } from '@mui/material';
-import { Appbar } from '../components/Appbar'
+import React from 'react';
+import { Box, Typography, CssBaseline, Toolbar } from '@mui/material';
+import { Appbar } from '../components/Appbar';
 import { Sidebar } from '../components/Sidebar';
-import { useEffect } from 'react';
-import { useState } from 'react';
 
 export const CadastroPautista = () => {
-
-  const [openItems, setOpenItems] = useState({
-    Cadastro: false,
-    Escala: false,
-    Mutirão: false,
-    Consulta: false
-  });
-  const [activeItem, setActiveItem] = useState('Home');
-
-  useEffect(() => {
-    const fetchCounts = async () => {
-      try {
-        const mutiraoCount = await getMutiraoCount();
-        const pautistaCount = await getPautistaCount();
-        setMutiraoCount(mutiraoCount);
-        setPautistaCount(pautistaCount)
-
-      } catch (err) {
-        console.error('Erro ao renderizar dados:', err);
-      }
-    };
-
-    fetchCounts();
-  }, []);
-
-  const exibirSubItens = (item) => {
-  setOpenItems((prevOpenItems) => ({
-    ...prevOpenItems,
-    [item]: !prevOpenItems[item],
-  }));
-};
-
-
-
-
   return (
     <Box sx={{ display: 'flex' }}>
-      <Appbar /> 
-      <Sidebar  openItems={openItems} exibirSubItens={exibirSubItens} activeItem={activeItem} setActiveItem={setActiveItem} /> 
-      <Typography variant="h6" noWrap component="div">
-        Página de Cadastro de Pautista
-      </Typography>
+      <CssBaseline />
+      <Appbar />
+      <Sidebar />
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar sx={{ mb: 2 }} />
+        <Typography variant="h4" component="div" sx={{ mb: 3 }}>
+          Cadastro de Pautista
+        </Typography>
+        oooi
+        <Box sx={{ maxWidth: '600px' }}>
+          <form>
+            <div>
+              <label htmlFor="nome">Nome:</label>
+              <input type="text" id="nome" name="nome" required />
+            </div>
+            <div>
+              <label htmlFor="email">Email:</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div>
+              <label htmlFor="telefone">Telefone:</label>
+              <input type="tel" id="telefone" name="telefone" required />
+            </div>
+            <div>
+              <label htmlFor="endereco">Endereço:</label>
+              <input type="text" id="endereco" name="endereco" required />
+            </div>
+            <button type="submit">Cadastrar</button>
+          </form>
+        </Box>
+      </Box>
     </Box>
   );
-}
+};
