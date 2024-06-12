@@ -14,25 +14,25 @@ const download = () => {
   document.body.removeChild(link);
 };
 
-  export const Home = () => {
-    const [mutiraoCount, setMutiraoCount] = useState(0)
-    const [pautistaCount, setPautistaCount] = useState(0)
+export const Home = () => {
+  const [mutiraoCount, setMutiraoCount] = useState(0)
+  const [pautistaCount, setPautistaCount] = useState(0)
 
-    useEffect(() => {
-      const fetchCounts = async () => {
-        try {
-          const mutiraoCount = await getMutiraoCount();
-          const pautistaCount = await getPautistaCount();
-          setMutiraoCount(mutiraoCount);
-          setPautistaCount(pautistaCount)
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const mutiraoCount = await getMutiraoCount();
+        const pautistaCount = await getPautistaCount();
+        setMutiraoCount(mutiraoCount);
+        setPautistaCount(pautistaCount)
 
-        } catch (err) {
+      } catch (err) {
           console.error('Erro ao renderizar dados:', err);
-        }
-      };
+      }
+    };
 
-      fetchCounts();
-    }, []);
+    fetchCounts();
+}, []);
 
     return (
       <>

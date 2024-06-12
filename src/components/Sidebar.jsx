@@ -33,7 +33,7 @@ export const Sidebar = () => {
     };
 
     const handleNavigation = (path) => {
-        console.log(path);
+        // console.log(path);
         setActiveSidebarItem(path);
         navigate(path);
     };
