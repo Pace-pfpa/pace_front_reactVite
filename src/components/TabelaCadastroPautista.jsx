@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
-const TabelaPautista = ({ data }) => {
+export const TabelaPautista = ({ data }) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -36,5 +36,3 @@ const TabelaPautista = ({ data }) => {
     </TableContainer>
   );
 };
-
-export default TabelaPautista;

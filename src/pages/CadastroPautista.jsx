@@ -22,15 +22,16 @@ export const CadastroPautista = () => {
     const fetchData = async () => {
       try {
         const pautistas = await fetchPautistaData();
+        console.log("response da fetchPautista:", pautistas)
         setData(pautistas || []);
       } catch (error) {
-        console.error('Erro ao buscar os dados:', error);
-        setData([]); // Pode ser útil inicializar com array vazio em caso de erro
+        console.error('Erro ao buscar os dadosss:', error);
+        setData([]); 
       }
     };
 
     fetchData();
-  }, []); // O segundo argumento do useEffect é um array vazio para garantir que seja executado apenas uma vez
+  }, []); 
 
   return (
     <>
@@ -72,7 +73,6 @@ export const CadastroPautista = () => {
           </Button>
         </form>
       </Box>
-      {/* Renderiza a tabela somente se data estiver definido e não vazio */}
       {data.length > 0 && <TabelaPautista data={data} />}
     </>
   );
