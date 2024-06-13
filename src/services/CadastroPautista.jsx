@@ -11,3 +11,13 @@ export const fetchPautistaData = async () => {
     throw error;
   }
 };
+
+export const cadastrarPautista = async (pautistaJson) => {
+  try {
+    const response = await axios.post(baseURL + 'pautista/', pautistaJson);
+    return response.data;
+  } catch (error) {
+    console.error('erro ao cadastrar pautista:', error)
+    throw error
+  }
+}
