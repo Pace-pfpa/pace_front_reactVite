@@ -3,7 +3,7 @@ import { Box, Typography, Grid, Button, CssBaseline, Toolbar } from '@mui/materi
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { TabelaPautistaContainer } from '../services/TabelaPautistaContainer';
 import { CustomCard } from '../components/CustomCard';
-import { getMutiraoCount, getPautistaCount } from '../services/CustomCard';
+import { getMutiraoCount, getPautistaCount } from '../services/CardService';
 
 const download = () => {
   const link = document.createElement('a');

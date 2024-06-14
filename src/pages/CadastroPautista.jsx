@@ -3,10 +3,11 @@ import { Box, Typography, TextField, MenuItem, Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { TabelaCadastroPautista } from '../components/TabelaCadastroPautista';
 import { cadastrarPautista, fetchPautistaData } from '../services/CadastroPautista';
+import SearchBar from '../components/SearchBar';
 
 const grupoOptions = [
-  { value: 'preposto', label: 'Preposto' },
-  { value: 'procurador', label: 'Procurador' },
+  { value: 'PREPOSTO', label: 'Preposto' },
+  { value: 'PROCURADOR', label: 'Procurador' },
 ];
 
 const statusOptions = [
@@ -16,21 +17,16 @@ const statusOptions = [
 
 export const CadastroPautista = () => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [formValues, setFormValues] = useState({
     nome: '',
-    grupo: 'preposto',
     status: 'ATIVO',
     dataInicial: '',
     dataFinal: '',
+    grupo: 'PREPOSTO',
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  };
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,6 +43,15 @@ export const CadastroPautista = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const filteredResults = data.filter((item) =>
+      item.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      item.grupoPautista.toLowerCase().includes(formValues.grupo.toLowerCase()) &&
+      item.statusPautista.toLowerCase().includes(formValues.status.toLowerCase())
+    );
+    setFilteredData(filteredResults);
+  }, [searchTerm, formValues, data]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formValues.nome || !formValues.grupo || !formValues.dataInicial || !formValues.dataFinal) {
@@ -54,9 +59,15 @@ export const CadastroPautista = () => {
       return;
     }
 
+    const payload = {
+      ...formValues,
+      peso: 0
+    }
+
     try {
-      await cadastrarPautista(formValues);
+      await cadastrarPautista(payload);
       alert('Pautista cadastrado com sucesso!');
+      setData([...data, payload]);
       limparCampos();
     } catch (error) {
       console.error('Erro ao cadastrar pautista:', error);
@@ -90,7 +101,7 @@ export const CadastroPautista = () => {
               variant="outlined"
               sx={{ width: '100%', mb: 2 }}
               value={formValues.nome}
-              onChange={handleInputChange}
+              onChange={(e) => setFormValues({ ...formValues, nome: e.target.value })}
               required
             />
           </div>
@@ -103,7 +114,7 @@ export const CadastroPautista = () => {
               label="Grupo"
               value={formValues.grupo}
               sx={{ width: '100%', mb: 2 }}
-              onChange={handleInputChange}
+              onChange={(e) => setFormValues({ ...formValues, grupo: e.target.value })}
               required
             >
               {grupoOptions.map((option) => (
@@ -122,7 +133,7 @@ export const CadastroPautista = () => {
               label="Status"
               value={formValues.status}
               sx={{ width: '100%', mb: 2 }}
-              onChange={handleInputChange}
+              onChange={(e) => setFormValues({ ...formValues, status: e.target.value })}
               required
             >
               {statusOptions.map((option) => (
@@ -142,7 +153,7 @@ export const CadastroPautista = () => {
               variant="outlined"
               sx={{ width: '49.5%', mb: 2 }}
               value={formValues.dataInicial}
-              onChange={handleInputChange}
+              onChange={(e) => setFormValues({ ...formValues, dataInicial: e.target.value })}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -157,7 +168,7 @@ export const CadastroPautista = () => {
               variant="outlined"
               sx={{ width: '49%', mb: 2, marginLeft: '8px' }}
               value={formValues.dataFinal}
-              onChange={handleInputChange}
+              onChange={(e) => setFormValues({ ...formValues, dataFinal: e.target.value })}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -176,7 +187,12 @@ export const CadastroPautista = () => {
         </form>
       </Box>
 
-      {data.length > 0 && <TabelaCadastroPautista data={data} />}
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 2 }}>
+        <SearchBar onSearch={setSearchTerm} />
+      </Box>
+
+      {filteredData.length > 0 ? <TabelaCadastroPautista data={filteredData} /> : <Typography variant="body1">Nenhum resultado encontrado.</Typography>}
     </>
   );
 };
+
