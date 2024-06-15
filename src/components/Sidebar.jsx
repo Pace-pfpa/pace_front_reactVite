@@ -90,7 +90,7 @@ export const Sidebar = () => {
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/cadastro-pautista')}>
                         <ListItemText primary="Pautista" />
                       </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }}>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/cadastro-advogado')}>
                         <ListItemText primary="Advogado" />
                       </ListItemButton>
                       <ListItemButton sx={{ pl: 4 }}>
