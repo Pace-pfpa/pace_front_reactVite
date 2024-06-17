@@ -35,7 +35,7 @@ export const CadastroPautista = () => {
         console.log("response da fetchPautista:", pautistas)
         setData(pautistas || []);
       } catch (error) {
-        console.error('Erro ao buscar os dados:', error);
+        console.error('Erro ao buscar os dados da fetchPautista:', error);
         setData([]);
       }
     };
@@ -53,12 +53,6 @@ export const CadastroPautista = () => {
   }, [searchTerm, formValues, data]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formValues.nome || !formValues.grupo || !formValues.dataInicial || !formValues.dataFinal) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
-
     const payload = {
       ...formValues,
       peso: 0
@@ -97,7 +91,7 @@ export const CadastroPautista = () => {
             <TextField
               id="nome-pautista"
               name="nome"
-              label="Nome"
+              label="Nome Pautista"
               variant="outlined"
               sx={{ width: '100%', mb: 2 }}
               value={formValues.nome}
@@ -176,14 +170,22 @@ export const CadastroPautista = () => {
             />
           </div>
 
-          <div sx={{ marginLeft: '8px' }}>
-            <Button type="button" variant="outlined" onClick={limparCampos} className='clearButton'>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+            <Button 
+              type="button" 
+              variant="outlined" 
+              onClick={limparCampos} 
+              className='clearButton'>
               Limpar
             </Button>
-            <Button type="submit" variant="contained" endIcon={<SendIcon />} className='sendButton' sx={{ ml: 1 }}>
+            <Button 
+              type="submit" 
+              variant="contained" 
+              endIcon={<SendIcon />} 
+              className='sendButton' sx={{ ml: 1  }}>
               Cadastrar
             </Button>
-          </div>
+          </Box>
         </form>
       </Box>
 
