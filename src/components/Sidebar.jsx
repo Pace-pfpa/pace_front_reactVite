@@ -94,7 +94,7 @@ export const Sidebar = () => {
                         <ListItemText primary="Advogado" />
                       </ListItemButton>
                       <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Pauta" />
+                        <ListItemText primary="Pauta" onClick={() => handleNavigation('/cadastro-pauta')}/>
                       </ListItemButton>
                     </List>
                   </Collapse>
