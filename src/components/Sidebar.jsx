@@ -93,8 +93,8 @@ export const Sidebar = () => {
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/cadastro-advogado')}>
                         <ListItemText primary="Advogado" />
                       </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Pauta" onClick={() => handleNavigation('/cadastro-pauta')}/>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/cadastro-pauta')}>
+                        <ListItemText primary="Pauta"/>
                       </ListItemButton>
                     </List>
                   </Collapse>
@@ -102,7 +102,7 @@ export const Sidebar = () => {
                 {text === 'Escala' && (
                   <Collapse in={openItems[text]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                      <ListItemButton sx={{ pl: 4 }}>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/escala-gerar')}>
                         <ListItemText primary="Gerar" />
                       </ListItemButton>
                     </List>

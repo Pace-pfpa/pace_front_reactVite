@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, TextField, MenuItem, Button } from '@mui/material';
+import { cadastrarPauta } from "../services/CadastroPauta";
 import SendIcon from '@mui/icons-material/Send';
 
 export const CadastroPauta =  () => {
@@ -7,10 +8,11 @@ export const CadastroPauta =  () => {
     const [hora, setHora] = useState('');
     const [turno, setTurno] = useState('')
     const [sala, setSala] = useState('')
-    const [processo, setProcesso] = useState('')
-    const [tipo, setTipo] = useState('');
-    const [nomeParte, setNomeParte] = useState('')
     const [vara, setVara] = useState('')
+    const [tipo, setTipo] = useState('');
+    const [processo, setProcesso] = useState('')
+    const [nomeParte, setNomeParte] = useState('')
+    
 
     const tipoOptions = [
         { value: 'CONCILIACAO', label: 'Conciliação' },
@@ -70,24 +72,23 @@ export const CadastroPauta =  () => {
 
     const handleSalaChange = (e) => {
         setSala(e.target.value);
-      };
-    
-      const handleProcessoChange = (e) => {
-        setProcesso(e.target.value);
-      };
+    };
 
-      const handleTipoChange = (e) => {
-        setTipo(e.target.value);
-      };
-    
-      const handleNomeParteChange = (e) => {
-        setNomeParte(e.target.value);
-      };
-    
-      const handleVaraChange = (e) => {
+    const handleVaraChange = (e) => {
         setVara(e.target.value);
-      };
+    };
 
+    const handleTipoChange = (e) => {
+        setTipo(e.target.value);
+    };
+    
+    const handleProcessoChange = (e) => {
+        setProcesso(e.target.value);
+    };
+
+    const handleNomeParteChange = (e) => {
+        setNomeParte(e.target.value);
+    };
       
     const countLines = (text) => {
       return text.split('\n').filter(line => line.trim() !== '').length;
@@ -103,6 +104,33 @@ export const CadastroPauta =  () => {
         setVara('');
       };
 
+    const [formValues, setFormValues] = useState({
+        data: '',
+        hora: '',
+        turno: '',
+        sala: '',
+        vara: '',
+        processo: '',
+        nomeParte: '',
+    });
+
+    const handleSubmit = async (e) => {
+        const payload = {
+          ...formValues,
+          tipo: 'conciliação'
+        }
+
+        try {
+            await cadastrarPauta(payload);
+            alert('Pauta cadastrada com sucesso!');
+            setData([...data, payload]);
+            limparCampos();
+          } catch (error) {
+            console.error('Erro ao cadastrar pautista:', error);
+            alert('Erro ao cadastrar pautista. Verifique os dados e tente novamente.');
+          }
+    };
+
     return (
         <>
           <Typography variant="h5" component="div" sx={{ mb: 3 }}>
@@ -110,7 +138,7 @@ export const CadastroPauta =  () => {
           </Typography>
 
           <Box sx={{ maxWidth: '1000px' }}>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
                     <TextField
                       id="data"
@@ -118,10 +146,18 @@ export const CadastroPauta =  () => {
                       placeholder="dd/mm/aa"
                       label="Data"
                       variant="outlined"
-                      sx={{ width: '100%', mb: 2 }}
+                      sx={{
+                        width: '100%',
+                        '& textarea': {
+                          height: '100px',
+                          overflowY: 'auto',
+                          resize: 'vertical',
+                        },
+                      }}
                       value={data}
                       onChange={handleDataChange}
                       multiline
+                      rows={4}
                       required
                     />
                     <Typography variant="body2" sx={{ m: 2 }}>
@@ -176,56 +212,6 @@ export const CadastroPauta =  () => {
                     <Typography variant="body2" sx={{ m: 2 }}>
                         {countLines(sala)} {countLines(sala) === 1}
                     </Typography>
-                
-                    <TextField
-                        id="processo"
-                        name="processo"
-                        placeholder="0000000-00.0000.0.00.0000"
-                        label="Processo"
-                        variant="outlined"
-                        sx={{ width: '100%', mb: 2 }}
-                        value={processo}
-                        onChange={handleProcessoChange}
-                        multiline
-                        required
-                    />
-                    <Typography variant="body2" sx={{ m: 2 }}>
-                        {countLines(processo)} {countLines(processo) === 1}
-                    </Typography>
-
-                    <TextField
-                        id="tipo"
-                        name="tipo"
-                        select
-                        label="Tipo"
-                        value={tipo}
-                        sx={{ width: '100%', mb: 2, mr: 5 }}
-                        onChange={handleTipoChange}
-                        required>
-
-                        { tipoOptions.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                        </MenuItem>
-                        ))}
-                    </TextField>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-                    <TextField
-                        id="nomeParte"
-                        name="nomeParte"
-                        label="Nome da Parte"
-                        variant="outlined"
-                        sx={{ width: '100%', mb: 2 }}
-                        value={nomeParte}
-                        onChange={handleNomeParteChange}
-                        multiline
-                        required
-                    />
-                    <Typography variant="body2" sx={{ m: 2 }}>
-                        {countLines(nomeParte)} {countLines(nomeParte) === 1}
-                    </Typography>
 
                     <TextField
                         id="vara"
@@ -243,6 +229,41 @@ export const CadastroPauta =  () => {
                         </MenuItem>
                         ))}
                     </TextField>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                <TextField
+                        id="processo"
+                        name="processo"
+                        placeholder="0000000-00.0000.0.00.0000"
+                        label="Processo"
+                        variant="outlined"
+                        sx={{ width: '100%', mb: 2 }}
+                        value={processo}
+                        onChange={handleProcessoChange}
+                        multiline
+                        required
+                    />
+                    <Typography variant="body2" sx={{ m: 2 }}>
+                        {countLines(processo)} {countLines(processo) === 1}
+                    </Typography>
+
+                    <TextField
+                        id="nomeParte"
+                        name="nomeParte"
+                        label="Nome da Parte"
+                        variant="outlined"
+                        sx={{ width: '100%', mb: 2 }}
+                        value={nomeParte}
+                        onChange={handleNomeParteChange}
+                        multiline
+                        required
+                    />
+                    <Typography variant="body2" sx={{ m: 2 }}>
+                        {countLines(nomeParte)} {countLines(nomeParte) === 1}
+                    </Typography>
+
+                    
                 </div>
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>

@@ -2,7 +2,8 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { Home } from '../pages/Home';
 import { CadastroPautista } from '../pages/CadastroPautista';
 import { CadastroAdvogado } from '../pages/CadastroAdvogado';
-import { CadastroPauta } from '../pages/CadastroPauta'
+import { CadastroPauta } from '../pages/CadastroPauta';
+import { EscalaGerar } from '../pages/EscalaGerar';
 import { MainLayout } from './MainLayout';
 
 export const AppRouter = () => {
@@ -14,6 +15,7 @@ export const AppRouter = () => {
                     <Route path="cadastro-pautista" element={<CadastroPautista />} />
                     <Route path="cadastro-advogado" element={<CadastroAdvogado />} />
                     <Route path="cadastro-pauta" element={<CadastroPauta />} />
+                    <Route path="escala-gerar" element={<EscalaGerar />} />
                 </Route>
             </Routes>
         </Router>
