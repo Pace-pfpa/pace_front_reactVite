@@ -12,7 +12,6 @@ export const CadastroPauta =  () => {
     const [tipo, setTipo] = useState('');
     const [processo, setProcesso] = useState('')
     const [nomeParte, setNomeParte] = useState('')
-    
 
     const tipoOptions = [
         { value: 'CONCILIACAO', label: 'Conciliação' },
@@ -57,18 +56,45 @@ export const CadastroPauta =  () => {
         { value: '4ª Vara cível de Belém', label: '4ª Vara cível de Belém' },
         { value: '3ª Vara cível de Parauapebas', label: '3ª Vara cível de Parauapebas' }
     ]
-      
+
     const handleDataChange = (e) => {
-      setData(e.target.value);
-    };
+        const lines = e.target.value.split('\n').map(line => {
+          let value = line.replace(/\D/g, '');
+          if (value.length > 2) {
+            value = value.slice(0, 2) + '/' + value.slice(2);
+          }
+          if (value.length > 5) {
+            value = value.slice(0, 5) + '/' + value.slice(5);
+          }
+          if (value.length > 10) {
+            value = value.slice(0, 10);
+          }
+          return value;
+        });
+        setData(lines.join('\n'));
+      };
       
     const handleHoraChange = (e) => {
-      setHora(e.target.value);
+      const lines = e.target.value.split('\n').map(line => {
+            let value = line.replace(/\D/g, '');
+            if (value.length > 2) {
+              value = value.slice(0, 2) + ':' + value.slice(2)
+            }
+            if (value.length > 5) {
+              value = value.slice(0, 5)
+            }
+            return value;
+        });
+        setHora(lines.join('\n'))
     };
 
     const handleTurnoChange = (e) => {
-        setTurno(e.target.value);
-      };
+    const value = e.target.value.toUpperCase();
+    const lines = value.split('\n').map(line => {
+        return line.trim() === 'MANHÃ' || line.trim() === 'TARDE' ? line.trim() : "";
+    }).filter(Boolean).join('\n');
+    setTurno(lines);
+};
 
     const handleSalaChange = (e) => {
         setSala(e.target.value);
@@ -83,7 +109,29 @@ export const CadastroPauta =  () => {
     };
     
     const handleProcessoChange = (e) => {
-        setProcesso(e.target.value);
+        const lines = e.target.value.split('\n').map(line => {
+            let value = line.replace(/\D/g, '');
+            if (value.length > 7) {
+                value = value.slice(0, 7) + '-' + value.slice(7)
+            }
+            if (value.length > 10) {
+                value = value.slice(0, 10) + '.' + value.slice(10)
+            }
+            if (value.length > 15) {
+                value = value.slice(0, 15) + '.' + value.slice(15)
+            }
+            if (value.length > 17) {
+                value = value.slice(0, 17) + '.' + value.slice(17)
+            }
+            if (value.length > 20) {
+                value = value.slice(0, 20) + '.' + value.slice(20)
+            }
+            if (value.length > 25) {
+                value = value.slice(0, 25)
+            }
+            return value;
+        });
+        setProcesso(lines.join('\n'))
     };
 
     const handleNomeParteChange = (e) => {
@@ -115,15 +163,21 @@ export const CadastroPauta =  () => {
     });
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
         const payload = {
-          ...formValues,
-          tipo: 'conciliação'
-        }
+          data,
+          hora,
+          turno,
+          sala,
+          vara,
+          tipo,
+          processo,
+          nomeParte,
+        };
 
         try {
             await cadastrarPauta(payload);
             alert('Pauta cadastrada com sucesso!');
-            setData([...data, payload]);
             limparCampos();
           } catch (error) {
             console.error('Erro ao cadastrar pautista:', error);
@@ -157,7 +211,7 @@ export const CadastroPauta =  () => {
                       value={data}
                       onChange={handleDataChange}
                       multiline
-                      rows={4}
+                      rows={2}
                       required
                     />
                     <Typography variant="body2" sx={{ m: 2 }}>
@@ -170,10 +224,18 @@ export const CadastroPauta =  () => {
                         placeholder="00:00"
                         label="Hora"
                         variant="outlined"
-                        sx={{ width: '100%', mb: 2 }}
+                        sx={{
+                            width: '100%',
+                            '& textarea': {
+                              height: '100px',
+                              overflowY: 'auto',
+                              resize: 'vertical',
+                            },
+                        }}
                         value={hora}
                         onChange={handleHoraChange}
                         multiline
+                        rows={2}
                         required
                     />
                     <Typography variant="body2" sx={{ m: 2 }}>
@@ -186,10 +248,18 @@ export const CadastroPauta =  () => {
                         placeholder="Tarde"
                         label="Turno"
                         variant="outlined"
-                        sx={{ width: '100%', mb: 2 }}
+                        sx={{
+                            width: '100%',
+                            '& textarea': {
+                              height: '100px',
+                              overflowY: 'auto',
+                              resize: 'vertical',
+                            },
+                        }}
                         value={turno}
                         onChange={handleTurnoChange}
                         multiline
+                        rows={2}
                         required
                     />
                     <Typography variant="body2" sx={{ m: 2 }}>
@@ -203,10 +273,18 @@ export const CadastroPauta =  () => {
                         name="sala"
                         label="Sala"
                         variant="outlined"
-                        sx={{ width: '100%', mb: 2 }}
+                        sx={{
+                            width: '100%',
+                            '& textarea': {
+                              height: '100px',
+                              overflowY: 'auto',
+                              resize: 'vertical',
+                            },
+                        }}
                         value={sala}
                         onChange={handleSalaChange}
                         multiline
+                        rows={2}
                         required
                     />
                     <Typography variant="body2" sx={{ m: 2 }}>
@@ -219,7 +297,15 @@ export const CadastroPauta =  () => {
                         select
                         label="Vara"
                         value={vara}
-                        sx={{ width: '100%', mb: 2, mr: 5 }}
+                        sx={{
+                            m: '10px',
+                            width: '100%',
+                            '& textarea': {
+                              height: '100px',
+                              overflowY: 'auto',
+                              resize: 'vertical',
+                            },
+                        }}
                         onChange={handleVaraChange}
                         required>
 
@@ -238,10 +324,18 @@ export const CadastroPauta =  () => {
                         placeholder="0000000-00.0000.0.00.0000"
                         label="Processo"
                         variant="outlined"
-                        sx={{ width: '100%', mb: 2 }}
+                        sx={{
+                            width: '100%',
+                            '& textarea': {
+                              height: '100px',
+                              overflowY: 'auto',
+                              resize: 'vertical',
+                            },
+                        }}
                         value={processo}
                         onChange={handleProcessoChange}
                         multiline
+                        rows={2}
                         required
                     />
                     <Typography variant="body2" sx={{ m: 2 }}>
@@ -253,10 +347,18 @@ export const CadastroPauta =  () => {
                         name="nomeParte"
                         label="Nome da Parte"
                         variant="outlined"
-                        sx={{ width: '100%', mb: 2 }}
+                        sx={{
+                            width: '100%',
+                            '& textarea': {
+                              height: '100px',
+                              overflowY: 'auto',
+                              resize: 'vertical',
+                            },
+                        }}
                         value={nomeParte}
                         onChange={handleNomeParteChange}
                         multiline
+                        rows={2}
                         required
                     />
                     <Typography variant="body2" sx={{ m: 2 }}>
