@@ -72,7 +72,7 @@ export const CadastroPauta =  () => {
           return value;
         });
         setData(lines.join('\n'));
-      };
+    };
       
     const handleHoraChange = (e) => {
       const lines = e.target.value.split('\n').map(line => {
@@ -89,12 +89,8 @@ export const CadastroPauta =  () => {
     };
 
     const handleTurnoChange = (e) => {
-    const value = e.target.value.toUpperCase();
-    const lines = value.split('\n').map(line => {
-        return line.trim() === 'MANHÃ' || line.trim() === 'TARDE' ? line.trim() : "";
-    }).filter(Boolean).join('\n');
-    setTurno(lines);
-};
+        setTurno(e.target.value);
+    };
 
     const handleSalaChange = (e) => {
         setSala(e.target.value);

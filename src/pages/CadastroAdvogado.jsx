@@ -46,7 +46,7 @@ export const CadastroAdvogado =  () => {
       alert('Advogado cadastrado com sucesso!');
       const updatedData = [...data, novoAdvogado];
       setData(updatedData);
-      setFilteredData(updatedData); // Atualiza filteredData com a nova lista completa
+      setFilteredData(updatedData); 
       limparCampos();
     } catch (error) {
       console.error('Erro ao cadastrar advogado:', error);
