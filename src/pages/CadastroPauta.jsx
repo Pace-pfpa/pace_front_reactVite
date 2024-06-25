@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, TextField, MenuItem, Button } from '@mui/material';
 import { cadastrarPauta } from "../services/CadastroPauta";
+import swal from "sweetalert";
+import { filtrarCadastroPauta } from "../helps/filtrarCadastroPauta";
 import SendIcon from '@mui/icons-material/Send';
 
 export const CadastroPauta =  () => {
@@ -58,34 +60,51 @@ export const CadastroPauta =  () => {
     ]
 
     const handleDataChange = (e) => {
-        const lines = e.target.value.split('\n').map(line => {
-          let value = line.replace(/\D/g, '');
-          if (value.length > 2) {
-            value = value.slice(0, 2) + '/' + value.slice(2);
-          }
-          if (value.length > 5) {
-            value = value.slice(0, 5) + '/' + value.slice(5);
-          }
-          if (value.length > 10) {
-            value = value.slice(0, 10);
-          }
-          return value;
-        });
-        setData(lines.join('\n'));
-    };
+        const inputDate = e.target.value;
+        
+        const currentYear = new Date().getFullYear();
       
+        const datePattern = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+        const dateMatch = inputDate.match(datePattern);
+
+        if (dateMatch) {
+            const [_, day, month, year] = dateMatch;
+
+            if (Number(year) > currentYear) {
+                swal({
+                    title: "Data Inválida!",
+                    text: "O ano não pode ser maior que o ano atual.",
+                    icon: "error",
+                    button: "OK"
+                });
+                setData('');
+                return;
+            }
+
+            // Validação adicional para dias e meses fora do intervalo correto
+            if (Number(day) < 1 || Number(day) > 31 || Number(month) < 1 || Number(month) > 12) {
+                swal({
+                    title: "Data Inválida!",
+                    text: "O dia deve ser entre 1 e 31 e o mês entre 1 e 12.",
+                    icon: "error",
+                    button: "OK"
+                });
+                setData('');
+                return;
+            }
+
+            // Adiciona zero na frente se dia ou mês tiver um dígito
+            const formattedDay = day.padStart(2, '0');
+            const formattedMonth = month.padStart(2, '0');
+
+            setData(`${formattedDay}/${formattedMonth}/${year}`);
+        } else {
+            setData(inputDate); // Atualiza o valor se o padrão não for atendido
+        }
+    };
+
     const handleHoraChange = (e) => {
-      const lines = e.target.value.split('\n').map(line => {
-            let value = line.replace(/\D/g, '');
-            if (value.length > 2) {
-              value = value.slice(0, 2) + ':' + value.slice(2)
-            }
-            if (value.length > 5) {
-              value = value.slice(0, 5)
-            }
-            return value;
-        });
-        setHora(lines.join('\n'))
+        setHora(e.target.value);
     };
 
     const handleTurnoChange = (e) => {
@@ -170,7 +189,10 @@ export const CadastroPauta =  () => {
           processo,
           nomeParte,
         };
-
+        const dataHoraFormatada = await filtrarCadastroPauta(payload.data.split('\n'), payload.hora.split('\n'));
+        console.log(dataHoraFormatada.arrayNovaHora)
+          
+       
         try {
             await cadastrarPauta(payload);
             alert('Pauta cadastrada com sucesso!');
