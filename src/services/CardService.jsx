@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseURL } from '../config';
+import { baseURL } from '../_config';
 
 export const getMutiraoCount = async () => {
     try {

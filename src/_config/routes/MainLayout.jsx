@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, CssBaseline, Toolbar } from '@mui/material';
-import { Appbar } from '../components/Appbar';
-import { Sidebar } from '../components/Sidebar';
+import { Appbar } from '../../components/Appbar';
+import { Sidebar } from '../../components/Sidebar';
 import { Outlet } from 'react-router-dom';
 
 export const MainLayout = () => {

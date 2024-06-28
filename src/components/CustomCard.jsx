@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Typography, Grid, Card, CardContent, CardHeader } from '@mui/material';
 import axios from 'axios';
-import { baseURL } from '../config/index'
+import { baseURL } from '../_config/index'
 
 export const CustomCard = ({ title, value, color }) => {
     return (

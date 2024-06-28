@@ -1,9 +1,9 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import { Home } from '../pages/Home';
-import { CadastroPautista } from '../pages/CadastroPautista';
-import { CadastroAdvogado } from '../pages/CadastroAdvogado';
-import { CadastroPauta } from '../pages/CadastroPauta';
-import { EscalaGerar } from '../pages/EscalaGerar';
+import { Home } from '../../pages/Home';
+import { CadastroPautista } from '../../pages/CadastroPautista';
+import { CadastroAdvogado } from '../../pages/CadastroAdvogado';
+import { CadastroPauta } from '../../pages/CadastroPauta';
+import { EscalaGerar } from '../../pages/EscalaGerar';
 import { MainLayout } from './MainLayout';
 
 export const AppRouter = () => {

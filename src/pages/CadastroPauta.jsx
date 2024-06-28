@@ -15,11 +15,6 @@ export const CadastroPauta =  () => {
     const [processo, setProcesso] = useState('')
     const [nomeParte, setNomeParte] = useState('')
 
-    const tipoOptions = [
-        { value: 'CONCILIACAO', label: 'Conciliação' },
-        { value: 'INSTRUCAO', label: 'Instução' },
-    ];
-
     const varaOptions = [
         { value: 'JEF Altamira', label: 'JEF Altamira'},
         { value: 'JEF Castanhal', label: 'JEF Castanhal'},
@@ -60,47 +55,7 @@ export const CadastroPauta =  () => {
     ]
 
     const handleDataChange = (e) => {
-        const inputDate = e.target.value;
-        
-        const currentYear = new Date().getFullYear();
-      
-        const datePattern = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
-        const dateMatch = inputDate.match(datePattern);
-
-        if (dateMatch) {
-            const [_, day, month, year] = dateMatch;
-
-            if (Number(year) > currentYear) {
-                swal({
-                    title: "Data Inválida!",
-                    text: "O ano não pode ser maior que o ano atual.",
-                    icon: "error",
-                    button: "OK"
-                });
-                setData('');
-                return;
-            }
-
-            // Validação adicional para dias e meses fora do intervalo correto
-            if (Number(day) < 1 || Number(day) > 31 || Number(month) < 1 || Number(month) > 12) {
-                swal({
-                    title: "Data Inválida!",
-                    text: "O dia deve ser entre 1 e 31 e o mês entre 1 e 12.",
-                    icon: "error",
-                    button: "OK"
-                });
-                setData('');
-                return;
-            }
-
-            // Adiciona zero na frente se dia ou mês tiver um dígito
-            const formattedDay = day.padStart(2, '0');
-            const formattedMonth = month.padStart(2, '0');
-
-            setData(`${formattedDay}/${formattedMonth}/${year}`);
-        } else {
-            setData(inputDate); // Atualiza o valor se o padrão não for atendido
-        }
+        setData(e.target.value);
     };
 
     const handleHoraChange = (e) => {
@@ -167,40 +122,127 @@ export const CadastroPauta =  () => {
         setVara('');
       };
 
-    const [formValues, setFormValues] = useState({
-        data: '',
-        hora: '',
-        turno: '',
-        sala: '',
-        vara: '',
-        processo: '',
-        nomeParte: '',
-    });
+     const [formValues, setFormValues] = useState({
+         data: '',
+         hora: '',
+         sala: '',
+         processo: '',
+         nomeParte: '',
+         cpf: '',
+         nomeAdvogado: '',
+         objeto: '',
+         vara: '',
+         turno: '',  
+     });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const payload = {
-          data,
-          hora,
-          turno,
-          sala,
-          vara,
-          tipo,
-          processo,
-          nomeParte,
-        };
-        const dataHoraFormatada = await filtrarCadastroPauta(payload.data.split('\n'), payload.hora.split('\n'));
-        console.log(dataHoraFormatada.arrayNovaHora)
+
+        data = formatar('data', data);
+        hora = formatar('hora', hora);
+        turno = formatar('turno', turno);
+        sala = formatar('sala', sala);
+
+        const processos = processo.split('\n').filter(line => line.trim() !== '');
+        let processosRepetidos = [];
+        processos.forEach((proc, i) => {
+            if (processos.indexOf(proc) !== i) {
+                processosRepetidos.push(proc);
+            }
+        });
+
+        if (processosRepetidos.length > 0) {
+            alert("O formulário contém números de processo repetidos, verifique os seguintes números:\n" + processosRepetidos.join(', '));
+            return;
+        }
+
+        if (!(countLines(data) === countLines(hora) && countLines(turno) === countLines(sala) && countLines(processo) === countLines(nomeParte))) {
+            alert("O número de linhas é diferente! Verifique os campos.");
+            return;
+        }
+
+        if (!vara) {
+            alert("Vara não selecionada. Verifique.")
+            return
+        }
+
+        if (hora === "hora inválida") {
+            alert("Campo hora está em formato incorreto. Por favor, verifique se todos os valores estão no formato HH:MM.");
+            return;
+        }
+
+        if (turno === undefined) {
+            alert("Algum valor no campo 'Turno' está incorreto. Apenas os valores 'MANHÃ' e 'TARDE' são permitidos.");
+            return;
+        }
+
+        if (sala === undefined) {
+            alert("O campo sala aceita apenas valores numéricos de um único dígito. Por favor, verifique");
+            return;
+        }
+
+        if ([data, hora, turno, sala, processo, nomeParte].some(v => v === undefined)) {
+            alert("Campo obrigatório vazio. Por favor, preencha todos.");
+            return;
+        }
+
+        const listaDePautas = []
+        const dataArr = data.split('\n')
+        const horaArr = data.split('\n')
+        const turnoArr = data.split('\n')
+        const salaArr = data.split('\n')
+        const processoArr = data.split('\n')
+        const nomeParteArr = data.split('\n')
+        const cpfArr = data.split('\n')
+        const nomeAdvogadoArr = data.split('\n')
+        const ObjetoArr = data.split('\n')
+
+        const valoresFormatados = {
+            data: formatar('data', formValues.data),
+            hora: formatar('hora', formValues.hora),
+            turno: formatar('turno', formValues.turno),
+            sala: formatar('sala', formValues.sala),
+            processo: formValues.processo,
+            nomeParte: formValues.nomeParte,
+            cpf: formValues.cpf,
+            nomeAdvogado: formValues.nomeAdvogado,
+            objeto: formValues.objeto,
+            tipo: formValues.tipo.toUpperCase(),
+            vara: formValues.vara
+        }
+        console.log('dados formatados:', valoresFormatados)
+
+
+
+
+        const { arrayNovaData, arrayNovaHora } = await filtrarCadastroPauta(data.split('\n'), hora.split('\n'));
+        const payloads = arrayNovaData.map((dataFormatada, index) => ({
+            data: dataFormatada,
+            hora: arrayNovaHora,
+            sala,
+            processo,
+            nomeParte,
+            cpf: '',
+            nomeAdvogado: '',
+            objeto: '',
+            vara,
+            turno,
+            tipo: 'CONCILIAÇÃO',
+        }));
+         const dataHoraFormatada = await filtrarCadastroPauta(payload.data.split('\n'), payload.hora.split('\n'));
+         console.log(dataHoraFormatada.arrayNovaHora)
+         console.log("Dados formatados payload:", payloads)
           
-       
-        try {
-            await cadastrarPauta(payload);
-            alert('Pauta cadastrada com sucesso!');
+         try {
+            for (const payload of payloads) {
+                await cadastrarPauta(payload);
+            }
+            swal('Sucesso', 'Pautas cadastradas com sucesso!', 'success');
             limparCampos();
-          } catch (error) {
-            console.error('Erro ao cadastrar pautista:', error);
-            alert('Erro ao cadastrar pautista. Verifique os dados e tente novamente.');
-          }
+        } catch (error) {
+            console.error('Erro ao cadastrar pauta:', error);
+            swal('Erro', 'Erro ao cadastrar pauta. Verifique os dados e tente novamente.', 'error');
+        }
     };
 
     return (

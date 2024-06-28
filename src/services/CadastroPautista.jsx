@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseURL } from '../config/index';
+import { baseURL } from '../_config/index';
 
 export const fetchPautistaData = async () => {
   try {

@@ -6,19 +6,18 @@ export async function filtrarCadastroPauta(datas, horas){
                 const mes = datas[i].split("/")[1];
                 const ano = datas[i].split("/")[2];
             if(dia.length <= 1 && mes.length<=1){
-                arrayNovaData.push( `0${dia}/0${mes}/${ano}`);
+                arrayNovaData.push( `${ano}/0${mes}/0${dia}`);
             
             } else if(dia.length <= 1){
-                arrayNovaData.push( `0${dia}/${mes}/${ano}`);
+                arrayNovaData.push( `${ano}/${mes}/0${dia}`);
 
             } else if(mes.length <= 1){
-                arrayNovaData.push( `${dia}/0${mes}/${ano}`);
+                arrayNovaData.push( `${ano}/0${mes}/${dia}`);
 
             } else{
-                `${dia}/${mes}/${ano}`;
+                `${ano}/${mes}/${dia}`;
             }
         }
-
 
         const arrayNovaHora = [];
         for(let i = 0; i < horas.length; i++) {
@@ -33,16 +32,7 @@ export async function filtrarCadastroPauta(datas, horas){
                 `${h}:${min}`;
             }
         }
-       
-    
-
-
-
 
         return {arrayNovaData, arrayNovaHora}
-       
-        
-
-
 
 }

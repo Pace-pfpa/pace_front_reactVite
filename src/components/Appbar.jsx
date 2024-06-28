@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from '../assets/logodopace.png'
-import logoPace from '../assets/pace.png'
+import logo from '../assets/img/logodopace.png'
+import logoPace from '../assets/img/pace.png'
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 
 export const Appbar = () => {

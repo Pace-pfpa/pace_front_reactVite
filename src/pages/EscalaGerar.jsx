@@ -10,7 +10,6 @@ const grupoOptions = [
 
 export const EscalaGerar =  () => {
     const [formValues, setFormValues] = useState({
-        
     });
 
     const limparCampos = () => {

@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { baseURL } from '../config/index';
+import { baseURL } from '../_config/index';
 
-export const cadastrarPauta = async () => {
+export const cadastrarPauta = async (payload) => {
   try {
-    const response = await axios.post(baseURL + 'pautista/');
-      console.log('Resposta do servidor: ', response.data)
+    const response = await axios.post(baseURL + 'pauta', payload);
+      console.log('Respostaaaaaa do servidor: ', response.data)
       return response.data;
     } catch (error) {
-      console.error('erro ao cadastrar pautista:', error)
+      console.error('erro ao cadastrar pauta:', error)
       throw error
     }
 }

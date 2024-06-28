@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import TabelaPautista from '../components/TabelaPautista';
-import { baseURL } from '../config/index';
+import { baseURL } from '../_config/index';
 
 const columns = [
   { id: 'nome', label: 'Pautistas', minWidth: 170 },
