@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, TextField, MenuItem, Button } from '@mui/material';
 import { cadastrarPauta } from "../services/CadastroPauta";
 import swal from "sweetalert";
-import { filtrarCadastroPauta } from "../helps/filtrarCadastroPauta";
+import { filtrarCadastroPauta } from "../helpers/filtrarCadastroPauta";
 import SendIcon from '@mui/icons-material/Send';
 
 export const CadastroPauta =  () => {

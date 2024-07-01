@@ -4,6 +4,10 @@ import { CadastroPautista } from '../../pages/CadastroPautista';
 import { CadastroAdvogado } from '../../pages/CadastroAdvogado';
 import { CadastroPauta } from '../../pages/CadastroPauta';
 import { EscalaGerar } from '../../pages/EscalaGerar';
+import { MutiraoExcluir } from '../../pages/MutiraoExcluir'
+import { ConsultaPautista } from '../../pages/ConsultaPautista';
+import { ConsultaAdvogado } from '../../pages/ConsultaAdvogado';
+import { ConsultaEscala } from '../../pages/ConsultaEscala';
 import { MainLayout } from './MainLayout';
 
 export const AppRouter = () => {
@@ -16,6 +20,10 @@ export const AppRouter = () => {
                     <Route path="cadastro-advogado" element={<CadastroAdvogado />} />
                     <Route path="cadastro-pauta" element={<CadastroPauta />} />
                     <Route path="escala-gerar" element={<EscalaGerar />} />
+                    <Route path="mutirao-excluir" element={<MutiraoExcluir />} />
+                    <Route path="consulta-pautista" element={<ConsultaPautista />} />
+                    <Route path="consulta-advogado" element={<ConsultaAdvogado />} />
+                    <Route path="consulta-escala" element={<ConsultaEscala />} />
                 </Route>
             </Routes>
         </Router>
