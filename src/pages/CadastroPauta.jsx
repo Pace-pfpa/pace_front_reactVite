@@ -139,8 +139,11 @@ export const CadastroPauta = () => {
             limparCampos();
         } catch (error) {
             console.error('Erro ao cadastrar pauta:', error);
-            console.log("entrou aqui")
-            swal('Erro', 'Erro ao cadastrar pauta. Verifique os dados e tente novamente.', 'error');
+            Swal.fire({
+                icon: "error",
+                title: "Ops...",
+                text: "Erro ao cadastrar pauta. Verifique os dados e tente novamente.",
+            });
         }
     };
 

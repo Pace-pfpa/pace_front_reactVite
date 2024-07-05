@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, TextField, MenuItem, Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { api_axios_getMutirao } from "../API/api_axios_getMutirao";
+import Swal from "sweetalert2";
 
 const grupoOptions = [
     { value: 'TODOS', label: 'Todos' },
@@ -8,9 +10,78 @@ const grupoOptions = [
     { value: 'PROCURADOR', label: 'Procurador' }
 ];
 
-export const EscalaGerar =  () => {
-    const [formValues, setFormValues] = useState({
-    });
+export const EscalaGerar = () => {
+    const [formValues, setFormValues] = useState([]);
+    const [vara, setVara] = useState("");
+
+    const listarVaras =  (mutiraoDatabase) => {
+      let varasSemEscala = [];
+      console.log(varasSemEscala)
+        mutiraoDatabase.forEach(obj => {
+            if(obj.status === "SEM_ESCALA"){
+              if(varasSemEscala.indexOf(obj.vara) === -1){
+                varasSemEscala.push(obj)
+              }
+            }
+        });
+
+        setFormValues(varasSemEscala)
+    }
+
+      useEffect(() => {
+        const varaForms = formValues
+        console.log("o",formValues)
+        if (varaForms.length > 0){
+          
+        }
+     
+
+      },[vara])
+
+
+
+
+    useEffect(() => {
+        const mutirao =  (async() => {
+          try{
+            const response = await api_axios_getMutirao();
+            listarVaras(response);
+
+          }catch(error){
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              },
+              customClass: {
+                container: 'swal-container'
+              }
+            });
+            Toast.fire({
+              icon: "error",
+              title: "Error ao buscar as varas!"
+            });
+
+            const swalContainer = document.querySelector('.swal-container');
+            if (swalContainer) {
+              swalContainer.style.marginTop = '60px';
+            }
+
+          }
+
+        });
+
+        mutirao();
+    },[])
+
+    const teste = (value)=> {
+      console.log(value)
+    }
 
     const limparCampos = () => {
         setFormValues({
@@ -35,27 +106,24 @@ export const EscalaGerar =  () => {
                   name="vara"
                   select
                   label="Vara"
-                  value={formValues.vara}
+                  value={vara}
                   sx={{ width: '100%', mb: 2 }}
-                  onChange={(e) => setFormValues({ ...formValues, vara: e.target.value })}
+                  onChange={(e) => setVara(e.target.value)}
                   required
                 >
-                  {/* {grupoOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))} */}
+                  {formValues.map((item, index) => (
+                    <MenuItem key={index} value={item.vara}> {item.vara} </MenuItem>
+                  ))}
                 </TextField>
               </div>
+
               <div>
                 <TextField
                   id="periodoMutirao"
                   name="periodoMutirao"
                   select
                   label="Período do Mutirão"
-                //   value={formValues.grupo}
                   sx={{ width: '100%', mb: 2 }}
-                //   onChange={(e) => setFormValues({ ...formValues, grupo: e.target.value })}
                   required
                 ></TextField>
               </div>
