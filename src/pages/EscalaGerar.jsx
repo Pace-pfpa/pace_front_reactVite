@@ -111,9 +111,9 @@ export const EscalaGerar = () => {
         setGrupo("");
     };
 
-//Verifica caso o usuário não tenha selecionado nenhuma vara e exibe um alerta
-    const handlePeriodoMutiraoClick = () => {
-        if (vara.length === 0) {
+        //Verifica caso o usuário não tenha selecionado nenhuma vara e exibe um alerta
+        const handlePeriodoMutiraoClick = () => {
+          if (varas.length === 0) {
             const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -130,15 +130,43 @@ export const EscalaGerar = () => {
             });
             Toast.fire({
                 icon: "warning",
-                title: "Por favor, selecione uma vara!"
+                title: "Por favor, selecione uma vara"
             });
 
             const swalContainer = document.querySelector('.swal-container');
             if (swalContainer) {
                 swalContainer.style.marginTop = '60px';
             }
-        }
-    };
+          }
+        };
+
+        const handleVaraClick = () => {
+          if (varas.length === 0) {
+              const Toast = Swal.mixin({
+                  toast: true,
+                  position: "top-end",
+                  showConfirmButton: false,
+                  timer: 2000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                      toast.onmouseenter = Swal.stopTimer;
+                      toast.onmouseleave = Swal.resumeTimer;
+                  },
+                  customClass: {
+                      container: 'swal-container'
+                  }
+              });
+              Toast.fire({
+                  icon: "warning",
+                  title: "Não há pautas cadastradas"
+              });
+  
+              const swalContainer = document.querySelector('.swal-container');
+              if (swalContainer) {
+                  swalContainer.style.marginTop = '60px';
+              }
+          }
+      };
 
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -187,6 +215,7 @@ export const EscalaGerar = () => {
                             select
                             label="Vara"
                             value={vara}
+                            onClick={handleVaraClick}
                             sx={{ width: '100%', mb: 2 }}
                             onChange={(e) => setVara(e.target.value)}
                             required
