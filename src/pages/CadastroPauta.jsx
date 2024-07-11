@@ -133,7 +133,7 @@ export const CadastroPauta = () => {
             await cadastrarPauta(listaDePautas);
             Swal.fire({
                 title: "Sucesso!",
-                text: "Pautas cadastradas com sucesso!",
+                text: "Pautas cadastradas com sucesso",
                 icon: "success"
             })
             limparCampos();

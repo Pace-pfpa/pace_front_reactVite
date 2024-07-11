@@ -12,7 +12,7 @@ export const Appbar = () => {
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
           - Programa de Agendamento e Controle de Escalas
         </Typography>
-        <Button color="inherit">Login</Button>
+        {/* <Button color="inherit">Login</Button> */}
       </Toolbar>
     </AppBar>
   );
