@@ -10,6 +10,7 @@ export const CadastroPauta = () => {
     const [turno, setTurno] = useState('');
     const [sala, setSala] = useState('');
     const [vara, setVara] = useState('');
+    const [grupo, setGrupo] = useState("");
     const [processo, setProcesso] = useState('');
     const [nomeParte, setNomeParte] = useState('');
 
@@ -51,6 +52,12 @@ export const CadastroPauta = () => {
         { value: '4ª Vara cível de Belém', label: '4ª Vara cível de Belém' },
         { value: '3ª Vara cível de Parauapebas', label: '3ª Vara cível de Parauapebas' }
     ]
+
+    const grupoOptions = [
+        { value: 'TODOS', label: 'Todos' },
+        { value: 'PREPOSTO', label: 'Preposto' },
+        { value: 'PROCURADOR', label: 'Procurador' }
+    ];
 
     const handleInputChange = (setter) => (e) => {
         setter(e.target.value);
@@ -222,7 +229,7 @@ export const CadastroPauta = () => {
                             label="Sala"
                             variant="outlined"
                             sx={{
-                                width: '100%',
+                                width: '95%',
                                 '& textarea': {
                                     height: '100px',
                                     overflowY: 'auto',
@@ -246,7 +253,7 @@ export const CadastroPauta = () => {
                             label="Vara"
                             value={vara}
                             sx={{
-                                m: '10px',
+                                mr: '25px',
                                 width: '100%',
                                 '& textarea': {
                                     height: '100px',
@@ -258,6 +265,31 @@ export const CadastroPauta = () => {
                             required
                         >
                             {varaOptions.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+
+                        <TextField
+                            id="grupo"
+                            name="grupo"
+                            select
+                            label="Grupo"
+                            value={grupo}
+                            sx={{
+                                mr: '25px',
+                                width: '100%',
+                                '& textarea': {
+                                    height: '100px',
+                                    overflowY: 'auto',
+                                    resize: 'vertical',
+                                },
+                            }}
+                            onChange={(e) => setGrupo(e.target.value)}
+                            
+                        >
+                            {grupoOptions.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
                                     {option.label}
                                 </MenuItem>

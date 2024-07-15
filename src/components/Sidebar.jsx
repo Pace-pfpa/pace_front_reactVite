@@ -5,10 +5,10 @@ import { ExpandLess, ExpandMore, Home as HomeIcon, Add as AddIcon, BackupTable a
 
 const iconMapping = {
   Home: <HomeIcon />,
-  Cadastro: <AddIcon />,
+  Cadastrar: <AddIcon />,
   Escala: <TableIcon />,
   Mutirão: <GroupIcon />,
-  Consulta: <SearchIcon />
+  Consultar: <SearchIcon />
 };
 
 const drawerWidth = 240;
@@ -17,10 +17,10 @@ export const Sidebar = () => {
     const navigate = useNavigate();
 
     const [openItems, setOpenItems] = useState({
-      Cadastro: false,
+      Cadastrar: false,
       Escala: false,
       Mutirão: false,
-      Consulta: false
+      Consultar: false
     });
 
     const [activeSidebarItem, setActiveSidebarItem] = useState('Home');
@@ -63,7 +63,7 @@ export const Sidebar = () => {
           </List>
           <Divider />
           <List>
-            {['Cadastro', 'Escala', 'Mutirão', 'Consulta'].map((text) => (
+            {['Cadastrar', 'Consultar', 'Escala', 'Mutirão'].map((text) => (
               <React.Fragment key={text}>
                 <ListItem disablePadding>
                   <ListItemButton
@@ -84,7 +84,7 @@ export const Sidebar = () => {
                     {openItems[text] ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
                 </ListItem>
-                {text === 'Cadastro' && (
+                {text === 'Cadastrar' && (
                   <Collapse in={openItems[text]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/cadastro-pautista')}>
@@ -117,7 +117,7 @@ export const Sidebar = () => {
                     </List>
                   </Collapse>
                 )}
-                {text === 'Consulta' && (
+                {text === 'Consultar' && (
                   <Collapse in={openItems[text]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/consulta-pautista')}>

@@ -49,7 +49,6 @@ export const EscalaGerar = () => {
         });
 
         setPeriodoMutiraoOptions(options);
-        // console.log("periodoMutiraoOptions", periodoMutiraoOptions);
     };
 
     const formatarData = (LocalDate, char) => {
@@ -85,7 +84,7 @@ export const EscalaGerar = () => {
                 });
                 Toast.fire({
                     icon: "error",
-                    title: "Error ao buscar as varas!"
+                    title: "Erro ao buscar as varas!"
                 });
 
                 const swalContainer = document.querySelector('.swal-container');
