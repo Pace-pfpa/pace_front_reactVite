@@ -11,8 +11,8 @@ const grupoOptions = [
 ];
 
 const statusOptions = [
-  { value: 'ATIVO', label: 'Ativo' },
-  { value: 'INATIVO', label: 'Inativo' },
+  { value: 'MANHA', label: 'Manhã' },
+  { value: 'TARDE', label: 'Tarde' },
 ];
 
 export const CadastroPautista = () => {
@@ -73,7 +73,7 @@ export const CadastroPautista = () => {
     setFormValues({
       nome: '',
       grupo: 'preposto',
-      status: 'ATIVO',
+      turno: 'MANHÃ',
       dataInicial: '',
       dataFinal: '',
     });
@@ -85,7 +85,7 @@ export const CadastroPautista = () => {
         Cadastrar Pautista
       </Typography>
 
-      <Box sx={{ maxWidth: '600px' }}>
+      <Box sx={{ maxWidth: '50%' }}>
         <form onSubmit={handleSubmit}>
           <div>
             <TextField
@@ -121,10 +121,10 @@ export const CadastroPautista = () => {
 
           <div>
             <TextField
-              id="status"
-              name="status"
+              id="turno"
+              name="turno"
               select
-              label="Status"
+              label="Turno"
               value={formValues.status}
               sx={{ width: '100%', mb: 2 }}
               onChange={(e) => setFormValues({ ...formValues, status: e.target.value })}
@@ -139,6 +139,25 @@ export const CadastroPautista = () => {
           </div>
 
           <div>
+            <TextField
+              id="varasComImpeditivo"
+              name="varasComImpeditivo"
+              select
+              label="Varas Com Impeditivo"
+              value={formValues.status}
+              sx={{ width: '100%', mb: 2 }}
+              onChange={(e) => setFormValues({ ...formValues, status: e.target.value })}
+              required
+            >
+              {statusOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
+
+          {/* <div>
             <TextField
               id="data-inicial"
               name="dataInicial"
@@ -168,7 +187,7 @@ export const CadastroPautista = () => {
               }}
               required
             />
-          </div>
+          </div> */}
 
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
             <Button 
