@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, MenuItem, Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import Autocomplete from '@mui/material/Autocomplete';
 import { TabelaCadastroPautista } from '../components/TabelaCadastroPautista';
 import { cadastrarPautista, fetchPautistaData } from '../services/CadastroPautista';
 import SearchBar from '../components/SearchBar';
@@ -8,6 +9,43 @@ import SearchBar from '../components/SearchBar';
 const grupoOptions = [
   { value: 'PREPOSTO', label: 'Preposto' },
   { value: 'PROCURADOR', label: 'Procurador' },
+];
+
+const varasImpeditivos = [
+  { value: 'JEF Altamira', label: 'JEF Altamira' },
+  { value: 'JEF Castanhal', label: 'JEF Castanhal' },
+  { value: 'JEF Itaituba', label: 'JEF Itaituba' },
+  { value: 'JEF Paragominas', label: 'JEF Paragominas' },
+  { value: 'JEF Redenção', label: 'JEF Redenção' },
+  { value: 'JEF Tucuruí', label: 'JEF Tucuruí' },
+  { value: 'JEF Belém 8ª TIT', label: 'JEF Belém 8ª TIT' },
+  { value: 'JEF Belém 8ª SUB', label: 'JEF Belém 8ª SUB' },
+  { value: 'JEF Belém 10ª TIT', label: 'JEF Belém 10ª TIT' },
+  { value: 'JEF Belém 10ª SUB', label: 'JEF Belém 10ª SUB' },
+  { value: 'JEF Belém 11ª TIT', label: 'JEF Belém 11ª TIT' },
+  { value: 'JEF Belém 11ª SUB', label: 'JEF Belém 11ª SUB' },
+  { value: 'JEF Belém 12ª TIT', label: 'JEF Belém 12ª TIT' },
+  { value: 'JEF Belém 12ª SUB', label: 'JEF Belém 12ª SUB' },
+  { value: 'JEF Marabá 1ª', label: 'JEF Marabá 1ª' },
+  { value: 'JEF Marabá 2ª', label: 'JEF Marabá 2ª' },
+  { value: 'JEF Santarém 1ª', label: 'JEF Santarém 1ª' },
+  { value: 'JEF Santarém 2ª', label: 'JEF Santarém 2ª' },
+  { value: 'CEJUC Belém', label: 'CEJUC Belém' },
+  { value: '1ª Vara Federal Belém', label: '1ª Vara Federal Belém' },
+  { value: '2ª Vara Federal Belém', label: '2ª Vara Federal Belém' },
+  { value: '5ª Vara Federal Belém', label: '5ª Vara Federal Belém' },
+  { value: '1ª Vara Federal Marabá', label: '1ª Vara Federal Marabá' },
+  { value: '2ª Vara Federal Marabá', label: '2ª Vara Federal Marabá' },
+  { value: '1ª Vara Federal Santarém', label: '1ª Vara Federal Santarém' },
+  { value: '2ª Vara Federal Santarém', label: '2ª Vara Federal Santarém' },
+  { value: 'Vara Federal Altamira', label: 'Vara Federal Altamira' },
+  { value: 'Vara Federal Castanhal', label: 'Vara Federal Castanhal' },
+  { value: 'Vara Federal Itaituba', label: 'Vara Federal Itaituba' },
+  { value: 'Vara Federal Paragominas', label: 'Vara Federal Paragominas' },
+  { value: 'Vara Federal Redenção', label: 'Vara Federal Redenção' },
+  { value: 'Vara Federal Tucuruí', label: 'Vara Federal Tucuruí' },
+  { value: '4ª Vara cível de Belém', label: '4ª Vara cível de Belém' },
+  { value: '3ª Vara cível de Parauapebas', label: '3ª Vara cível de Parauapebas' }
 ];
 
 const statusOptions = [
@@ -20,10 +58,10 @@ export const CadastroPautista = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [formValues, setFormValues] = useState({
     nome: '',
-    status: 'ATIVO',
-    dataInicial: '',
-    dataFinal: '',
     grupo: 'PREPOSTO',
+    status: '',
+    turno: 'MANHA',
+    varasImpeditivos: []
   });
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,11 +70,13 @@ export const CadastroPautista = () => {
     const fetchData = async () => {
       try {
         const pautistas = await fetchPautistaData();
-        console.log("response da fetchPautista:", pautistas)
+        console.log("response da fetchPautista:", pautistas);
         setData(pautistas || []);
+        setFilteredData(pautistas || []);
       } catch (error) {
         console.error('Erro ao buscar os dados da fetchPautista:', error);
         setData([]);
+        setFilteredData([]);
       }
     };
 
@@ -45,23 +85,24 @@ export const CadastroPautista = () => {
 
   useEffect(() => {
     const filteredResults = data.filter((item) =>
-      item.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      item.grupoPautista.toLowerCase().includes(formValues.grupo.toLowerCase()) &&
-      item.statusPautista.toLowerCase().includes(formValues.status.toLowerCase())
+      item.nome.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filteredResults);
-  }, [searchTerm, formValues, data]);
+  }, [searchTerm, data]);
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     const payload = {
       ...formValues,
-      peso: 0
-    }
+      varasImpeditivos: formValues.varasImpeditivos.map((vara) => vara.value),
+      peso: 0,
+    };
 
     try {
       await cadastrarPautista(payload);
       alert('Pautista cadastrado com sucesso!');
       setData([...data, payload]);
+      setFilteredData([...filteredData, payload]);
       limparCampos();
     } catch (error) {
       console.error('Erro ao cadastrar pautista:', error);
@@ -72,10 +113,9 @@ export const CadastroPautista = () => {
   const limparCampos = () => {
     setFormValues({
       nome: '',
-      grupo: 'preposto',
-      turno: 'MANHÃ',
-      dataInicial: '',
-      dataFinal: '',
+      grupo: 'PREPOSTO',
+      status: 'MANHA',
+      varasImpeditivos: ''
     });
   };
 
@@ -139,69 +179,40 @@ export const CadastroPautista = () => {
           </div>
 
           <div>
-            <TextField
-              id="varasComImpeditivo"
-              name="varasComImpeditivo"
-              select
-              label="Varas Com Impeditivo"
-              value={formValues.status}
-              sx={{ width: '100%', mb: 2 }}
-              onChange={(e) => setFormValues({ ...formValues, status: e.target.value })}
-              required
-            >
-              {statusOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
+            <Autocomplete
+              multiple
+              id="tags-outlined"
+              options={varasImpeditivos}
+              getOptionLabel={(option) => option.label}
+              filterSelectedOptions
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Varas com Impeditivos"
+                  placeholder="Selecione uma ou mais varas"
+                  required
+                />
+              )}
+              onChange={(event, newValue) => setFormValues({ ...formValues, varasImpeditivos: newValue })}
+            />
           </div>
 
-          {/* <div>
-            <TextField
-              id="data-inicial"
-              name="dataInicial"
-              label="Data Inicial"
-              type="date"
-              variant="outlined"
-              sx={{ width: '49.5%', mb: 2 }}
-              value={formValues.dataInicial}
-              onChange={(e) => setFormValues({ ...formValues, dataInicial: e.target.value })}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-            />
-
-            <TextField
-              id="data-final"
-              name="dataFinal"
-              label="Data Final"
-              type="date"
-              variant="outlined"
-              sx={{ width: '49%', mb: 2, marginLeft: '8px' }}
-              value={formValues.dataFinal}
-              onChange={(e) => setFormValues({ ...formValues, dataFinal: e.target.value })}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-            />
-          </div> */}
-
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
-            <Button 
-              type="button" 
-              variant="outlined" 
-              onClick={limparCampos} 
-              className='clearButton'>
+            <Button
+              type="button"
+              variant="outlined"
+              onClick={limparCampos}
+              className="clearButton"
+            >
               Limpar
             </Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
-              endIcon={<SendIcon />} 
-              className='sendButton' sx={{ ml: 1  }}>
+            <Button
+              type="submit"
+              variant="contained"
+              endIcon={<SendIcon />}
+              className="sendButton"
+              sx={{ ml: 1 }}
+            >
               Cadastrar
             </Button>
           </Box>
@@ -212,8 +223,11 @@ export const CadastroPautista = () => {
         <SearchBar onSearch={setSearchTerm} />
       </Box>
 
-      {filteredData.length > 0 ? <TabelaCadastroPautista data={filteredData} /> : <Typography variant="body1">Nenhum resultado encontrado.</Typography>}
+      {filteredData.length > 0 ? (
+        <TabelaCadastroPautista data={filteredData} />
+      ) : (
+        <Typography variant="body1">Nenhum resultado encontrado.</Typography>
+      )}
     </>
   );
 };
-

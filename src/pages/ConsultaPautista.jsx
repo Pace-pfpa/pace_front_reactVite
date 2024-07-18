@@ -1,93 +1,114 @@
-import React, { useEffect, useState } from "react";
-import SearchIcon from '@mui/icons-material/Send';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import AdfScannerIcon from '@mui/icons-material/AdfScanner';
 import { Box, Typography, TextField, MenuItem, Button } from '@mui/material';
-import { TabelaPautistaContainer } from "../services/TabelaPautistaContainer";
+import { TabelaCadastroPautista } from '../components/TabelaCadastroPautista';
+import { baseURL } from '../_config/index';
 
 export const ConsultaPautista = () => {
+  const [data, setData] = useState([]);
+  const [formValues, setFormValues] = useState({
+    nome: '',
+    grupo: '',
+    status: '',
+  });
 
-    const limparCampos = () => {
-        setFormValues({
-          nome: '',
-          grupo: '',
-          status: '',
-        });
-      };
+  const limparCampos = () => {
+    setFormValues({
+      nome: '',
+      grupo: '',
+      status: '',
+    });
+  };
 
-    return (
-        <>
-          <Typography variant="h5" component="div" sx={{ mb: 3 }}>
-            Consultar Pautista
-          </Typography>
-    
-          <Box sx={{ maxWidth: '600px' }}>
-            <form>
-              <div>
-                <TextField
-                  id="nome"
-                  name="nome"
-                  label="Nome Pautista"
-                  variant="outlined"
-                  sx={{ width: '100%', mb: 2 }}
-                //   value={formValues.nome}
-                //   onChange={(e) => setFormValues({ ...formValues, nomeAdvogado: e.target.value })}
-                  required
-                />
-              </div>
-    
-              <div>
-                <TextField
-                  id="status"
-                  name="status"
-                  label="Status"
-                  variant="outlined"
-                  sx={{ width: '100%', mb: 2 }}
-                //   value={formValues.nomeAdvogado}
-                //   onChange={(e) => setFormValues({ ...formValues, numeroOAB: e.target.value })}
-                  required
-                />
-              </div>
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${baseURL}pautista/`);
+      const formattedData = response.data.map(item => ({
+        ...item,
+        dataInicial: formatarData(item.dataInicial),
+        dataFinal: formatarData(item.dataFinal),
+      }));
+      setData(formattedData);
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  };
 
-              <div>
-                <TextField
-                  id="grupo"
-                  name="grupo"
-                  label="Grupo"
-                  variant="outlined"
-                  sx={{ width: '100%', mb: 2 }}
-                //   value={formValues.grupo}
-                //   onChange={(e) => setFormValues({ ...formValues, numeroOAB: e.target.value })}
-                  required
-                />
-              </div>
-    
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
-                <Button 
-                  type="button" 
-                  variant="outlined" 
-                  onClick={limparCampos} 
-                  className='clearButton'>
-                  Limpar
-                </Button>
-    
-                <Button 
-                  type="submit" 
-                  variant="contained" 
-                  endIcon={<SearchIcon />} 
-                  className='sendButton' sx={{ ml: 1  }}>
-                  Pesquisar
-                </Button>
-              </Box>
-            </form>
-          </Box>
+  const pesquisar = async () => {
+    try {
+      const response = await axios.get(`${baseURL}pautista/`, { params: formValues });
+      const formattedData = response.data.map(item => ({
+        ...item,
+        dataInicial: formatarData(item.dataInicial),
+        dataFinal: formatarData(item.dataFinal),
+      }));
+      setData(formattedData);
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  };
 
-          
-    
-          {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 2 }}>
-            <SearchBar onSearch={setSearchTerm} />
-          </Box> */}
-    
-          {/* {filteredData.length > 0 ? <TabelaCadastroAdvogado data={filteredData} /> : <Typography variant="body1">Nenhum resultado encontrado.</Typography>} */}
-          
-        </>
-      );
-}
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
+  const formatarData = (data) => {
+    if (data) {
+      return data.split('-').reverse().join('-');
+    }
+    return '';
+  };
+
+  return (
+    <>
+     <div>
+      <Typography variant="h5" component="div" sx={{ mb: 3 }}>
+        Consultar Pautista
+      </Typography>
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          gap: 2, 
+          mt: 2  
+        }}
+      >
+        <Button
+          variant="outlined"
+          startIcon={<DeleteIcon />}
+          sx={{ borderColor: '#D32F2F', color: '#D32F2F' }}
+        >
+          Deletar
+        </Button>
+        <Button
+          variant="outlined"
+          endIcon={<EditIcon />}
+        >
+          Editar
+        </Button>
+        <Button
+          variant="outlined"
+          endIcon={<AdfScannerIcon />}
+          sx={{ borderColor: '#757575', color: '#757575' }}
+        >
+          Imprimir
+        </Button>
+      </Box>
+    </div>
+
+      <TabelaCadastroPautista data={data} />
+    </>
+  );
+};

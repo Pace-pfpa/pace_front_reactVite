@@ -21,7 +21,8 @@ export const TabelaCadastroPautista = ({ data }) => {
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>
-              <TableCell align="right">Grupo</TableCell>
+              <TableCell align="left">Grupo</TableCell>
+              <TableCell align="right">Turno</TableCell>
               <TableCell align="right">Status</TableCell>
               <TableCell align="right">Data Inicial</TableCell>
               <TableCell align="right">Data Final</TableCell>
@@ -32,7 +33,8 @@ export const TabelaCadastroPautista = ({ data }) => {
             {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
               <TableRow key={row.nome}>
                 <TableCell component="th" scope="row">{row.nome}</TableCell>
-                <TableCell align="right">{row.grupoPautista}</TableCell>
+                <TableCell align="left">{row.grupoPautista}</TableCell>
+                <TableCell align="left">{row.turnoPautista}</TableCell>
                 <TableCell align="right">{row.statusPautista}</TableCell>
                 <TableCell align="right">{row.dataInicial}</TableCell>
                 <TableCell align="right">{row.dataFinal}</TableCell>
