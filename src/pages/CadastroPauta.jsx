@@ -226,6 +226,7 @@ export const CadastroPauta = () => {
                         <TextField
                             id="sala"
                             name="sala"
+                            placeholder="0-9"
                             label="Sala"
                             variant="outlined"
                             sx={{
@@ -249,6 +250,7 @@ export const CadastroPauta = () => {
                         <TextField
                             id="vara"
                             name="vara"
+                            placeholder="Selecione uma vara"
                             select
                             label="Vara"
                             value={vara}
@@ -301,6 +303,7 @@ export const CadastroPauta = () => {
                         <TextField
                             id="processo"
                             name="processo"
+                            placeholder="0000000-00.0000.0.00.0000"
                             label="Processo"
                             variant="outlined"
                             sx={{

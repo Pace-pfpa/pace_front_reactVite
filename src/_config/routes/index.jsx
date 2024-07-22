@@ -8,6 +8,7 @@ import { ConsultaPautista } from '../../pages/ConsultaPautista';
 import { ConsultaAdvogado } from '../../pages/ConsultaAdvogado';
 import { ConsultaEscala } from '../../pages/ConsultaEscala';
 import { MainLayout } from './MainLayout';
+import { EditarPautista } from '../../pages/EditarPautista';
 
 export const AppRouter = () => {
     return (
@@ -22,6 +23,7 @@ export const AppRouter = () => {
                     <Route path="consulta-pautista" element={<ConsultaPautista />} />
                     <Route path="consulta-advogado" element={<ConsultaAdvogado />} />
                     <Route path="consulta-escala" element={<ConsultaEscala />} />
+                    <Route path="editar-pautista" element={<EditarPautista />} />
                 </Route>
             </Routes>
         </Router>

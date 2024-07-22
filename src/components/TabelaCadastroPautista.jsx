@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 
-export const TabelaCadastroPautista = ({ data }) => {
+export const TabelaCadastroPautista = ({ data, enableRowSelection, selected = [], onRowClick }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -12,6 +12,12 @@ export const TabelaCadastroPautista = ({ data }) => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const handleRowClick = (row) => {
+    if (enableRowSelection && onRowClick) {
+      onRowClick(row);
+    }
   };
 
   return (
@@ -31,7 +37,15 @@ export const TabelaCadastroPautista = ({ data }) => {
           </TableHead>
           <TableBody>
             {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <TableRow key={row.nome}>
+              <TableRow
+                key={row.nome}
+                onClick={() => handleRowClick(row)}
+                sx={{
+                  cursor: enableRowSelection ? 'pointer' : 'default',
+                  backgroundColor: selected.includes(row.nome) ? '#d3d3d3' : 'inherit',
+                  color: selected.includes(row.nome) ? '#fff' : 'inherit',
+                }}
+              >
                 <TableCell component="th" scope="row">{row.nome}</TableCell>
                 <TableCell align="left">{row.grupoPautista}</TableCell>
                 <TableCell align="left">{row.turnoPautista}</TableCell>
