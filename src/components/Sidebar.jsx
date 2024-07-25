@@ -87,14 +87,29 @@ export const Sidebar = () => {
                 {text === 'Cadastrar' && (
                   <Collapse in={openItems[text]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/cadastro-pauta')}>
+                        <ListItemText primary="Pauta"/>
+                      </ListItemButton>
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/cadastro-pautista')}>
                         <ListItemText primary="Pautista" />
                       </ListItemButton>
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/cadastro-advogado')}>
                         <ListItemText primary="Advogado" />
                       </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/cadastro-pauta')}>
-                        <ListItemText primary="Pauta"/>
+                    </List>
+                  </Collapse>
+                )}
+                {text === 'Consultar' && (
+                  <Collapse in={openItems[text]} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/consulta-escala')}>
+                        <ListItemText primary="Escala" />
+                      </ListItemButton>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/consulta-pautista')}>
+                        <ListItemText primary="Pautista" />
+                      </ListItemButton>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/consulta-advogado')}>
+                        <ListItemText primary="Advogado" />
                       </ListItemButton>
                     </List>
                   </Collapse>
@@ -104,21 +119,6 @@ export const Sidebar = () => {
                     <List component="div" disablePadding>
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/mutirao-excluir')}>
                         <ListItemText primary="Excluir" />
-                      </ListItemButton>
-                    </List>
-                  </Collapse>
-                )}
-                {text === 'Consultar' && (
-                  <Collapse in={openItems[text]} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/consulta-pautista')}>
-                        <ListItemText primary="Pautista" />
-                      </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/consulta-advogado')}>
-                        <ListItemText primary="Advogado" />
-                      </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/consulta-escala')}>
-                        <ListItemText primary="Escala" />
                       </ListItemButton>
                     </List>
                   </Collapse>

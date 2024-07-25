@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, TextField, MenuItem, Button } from '@mui/material';
+import { Box, Typography, TextField, Button } from '@mui/material';
 import { cadastrarAdvogado, fetchAdvogados } from '../services/CadastroAdvogado';
-import { TabelaCadastroAdvogado } from '../components/TabelaCadastroAdvogado';
+import { TabelaCadastroAdvogado } from '../components/TabelaAdvogado';
 import SendIcon from '@mui/icons-material/Send';
 import SearchBar from '../components/SearchBar';
 
@@ -67,7 +67,7 @@ export const CadastroAdvogado =  () => {
         Cadastrar Advogado
       </Typography>
 
-      <Box sx={{ maxWidth: '600px' }}>
+      <Box sx={{ maxWidth: '60%', padding: 2 }}>
         <form onSubmit={handleSubmit}>
           <div>
             <TextField

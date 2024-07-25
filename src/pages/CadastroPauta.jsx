@@ -160,7 +160,7 @@ export const CadastroPauta = () => {
                 Cadastrar Pautas de Audiências
             </Typography>
 
-            <Box sx={{ maxWidth: '1000px' }}>
+            <Box sx={{ maxWidth: '90%', padding: 2 }}>
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
                         <TextField

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, TextField, MenuItem, Button } from '@mui/material';
-export const EditarPautista =  () => {
+export const EditarAdvogado =  () => {
     const [selecionarData, setSelecionarData] = useState('');
     const grupoOptions = [
         { value: 'PREPOSTO', label: 'Preposto' },

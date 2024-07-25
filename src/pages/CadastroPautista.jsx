@@ -89,7 +89,7 @@ export const CadastroPautista = () => {
         Cadastrar Pautista
       </Typography>
 
-      <Box sx={{ maxWidth: '50%' }}>
+      <Box sx={{ maxWidth: '60%', padding: 2 }}>
         <form onSubmit={handleSubmit}>
           <div>
             <TextField
@@ -104,14 +104,14 @@ export const CadastroPautista = () => {
             />
           </div>
 
-          <div>
+          <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
             <TextField
               id="grupo"
               name="grupo"
               select
               label="Grupo"
               value={formValues.grupo}
-              sx={{ width: '100%', mb: 2 }}
+              sx={{ flex: 1 }}
               onChange={(e) => setFormValues({ ...formValues, grupo: e.target.value })}
               required
             >
@@ -121,16 +121,14 @@ export const CadastroPautista = () => {
                 </MenuItem>
               ))}
             </TextField>
-          </div>
 
-          <div>
             <TextField
               id="turno"
               name="turno"
               select
               label="Turno"
               value={formValues.turno}
-              sx={{ width: '100%', mb: 2 }}
+              sx={{ flex: 1 }}
               onChange={(e) => setFormValues({ ...formValues, turno: e.target.value })}
               required
             >
