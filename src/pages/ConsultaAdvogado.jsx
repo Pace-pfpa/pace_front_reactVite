@@ -6,6 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Swal from "sweetalert2";
 import axios from "axios";
 import { baseURL } from "../_config";
+import AdfScannerIcon from '@mui/icons-material/AdfScanner';
 import { useNavigate } from 'react-router-dom';
 
 export const ConsultaAdvogado = () => {
@@ -140,6 +141,10 @@ export const ConsultaAdvogado = () => {
 
         <Button variant="outlined" startIcon={<DeleteIcon />} onClick={handleBotaoDeletar} sx={{ borderColor: '#D32F2F', color: '#D32F2F' }}>
           Deletar
+        </Button>
+
+        <Button variant="outlined" endIcon={<AdfScannerIcon />} sx={{ borderColor: '#757575', color: '#757575' }}>
+            Imprimir
         </Button>
       </Box>
 

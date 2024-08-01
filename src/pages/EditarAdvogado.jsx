@@ -21,16 +21,16 @@ export const EditarAdvogado =  () => {
     return (
         <>
             <Typography variant="h5" component="div" sx={{ mb: 3 }}>
-                Editar Pautista
+                Editar Advogado
             </Typography>
 
             <Box sx={{ maxWidth: '50%' }}>
                 <form>
                     <div>
                         <TextField
-                            id="nome-pautista"
+                            id="nomeAdvogado"
                             name="nome"
-                            label="Nome Pautista"
+                            label="Nome Advogado"
                             variant="outlined"
                             sx={{ width: '100%', mb: 2 }}
                             // value={formValues.nome}
@@ -39,73 +39,16 @@ export const EditarAdvogado =  () => {
                         />
                     </div>
 
-                    <div>
-                        <TextField
-                            id="status"
-                            name="status"
-                            select
-                            label="Status"
-                            // value={formValues.status}
-                            sx={{ width: '100%', mb: 2 }}
-                            // onChange={(e) => setFormValues({ ...formValues, status: e.target.value })}
-                            required
-                        >
-                         {statusOptions.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem> 
-                             ))}
-                        </TextField>
-                    </div>
-
-                    <div>
-                        <TextField
-                            id="grupo"
-                            name="grupo"
-                            select
-                            label="Grupo"
-                            // value={formValues.grupo}
-                            sx={{ width: '100%', mb: 2 }}
-                            // onChange={(e) => setFormValues({ ...formValues, grupo: e.target.value })}
-                            required
-                        >
-                         {grupoOptions.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem> 
-                             ))}
-                        </TextField>
-                    </div>
-
-                    <div>
                     <TextField
-                        id="date"
-                        name="date"
-                        label="Data Inicial"
-                        type="date"
-                        value={selecionarData}
-                        onChange={handleDateChange}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
+                        id="numeroOAB"
+                        name="numeroOAB"
+                        label="Número OAB"
+                        variant="outlined"
                         sx={{ width: '100%', mb: 2 }}
+                        // value={formValues.numeroOAB}
+                        // onChange={(e) => setFormValues({ ...formValues, numeroOAB: e.target.value })}
                         required
                     />
-
-                    <TextField
-                        id="date"
-                        name="date"
-                        label="Data Final"
-                        type="date"
-                        value={selecionarData}
-                        onChange={handleDateChange}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        sx={{ width: '100%', mb: 2 }}
-                        required
-                    />
-                    </div>
 
                     <Box
                         sx={{

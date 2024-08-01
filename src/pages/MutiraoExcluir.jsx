@@ -91,12 +91,11 @@ export const MutiraoExcluir = () => {
 
   return (
     <>
-      <Box sx={{ maxWidth: '600px' }}>
         <form>
           <Typography variant="h5" component="div" sx={{ mb: 3 }}>
             Excluir Mutirão
           </Typography>
-
+          <Box sx={{ maxWidth: '60%', padding: 2 }}>
           <TextField
             id="vara"
             name="vara"
@@ -162,8 +161,8 @@ export const MutiraoExcluir = () => {
               Excluir
             </Button>
           </Box>
+          </Box>
         </form>
-      </Box>
     </>
   );
 }

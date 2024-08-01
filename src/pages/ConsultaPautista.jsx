@@ -63,27 +63,26 @@ export const ConsultaPautista = () => {
     if (selected.length === 0) {
       const Toast = Swal.mixin({
         toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                },
-                customClass: {
-                    container: 'swal-container'
-                }
-              });
-              Toast.fire({
-                icon: "warning",
-                title: "Nenhum item selecionado!"
-            });
-            const swalContainer = document.querySelector('.swal-container');
-            if (swalContainer) {
-              swalContainer.style.marginTop = '60px';
-                swalContainer.style.marginTop = '60px';
-            }
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+        customClass: {
+          container: 'swal-container'
+        }
+      });
+      Toast.fire({
+        icon: "warning",
+        title: "Nenhum item selecionado!"
+      });
+      const swalContainer = document.querySelector('.swal-container');
+      if (swalContainer) {
+        swalContainer.style.marginTop = '60px';
+      }
     } else {
       navigate('/editar-pautista');
     }
@@ -93,47 +92,66 @@ export const ConsultaPautista = () => {
     if (selected.length === 0) {
       const Toast = Swal.mixin({
         toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                },
-                customClass: {
-                    container: 'swal-container'
-                }
-              });
-              Toast.fire({
-                icon: "warning",
-                title: "Nenhum item selecionado!"
-            });
-            const swalContainer = document.querySelector('.swal-container');
-            if (swalContainer) {
-              swalContainer.style.marginTop = '60px';
-                swalContainer.style.marginTop = '60px';
-            }
-    } else {
-      if (selected.length > 0) {
-        Swal.fire({
-          title: "Tem certeza?",
-          text: "Esta ação não pode ser desfeita",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Sim, deletar"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              title: "Sucesso",
-              text: "Pautistas deletados da tabela.",
-              icon: "success"
-            });
-          }
-        });
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+        customClass: {
+          container: 'swal-container'
+        }
+      });
+      Toast.fire({
+        icon: "warning",
+        title: "Nenhum item selecionado!"
+      });
+      const swalContainer = document.querySelector('.swal-container');
+      if (swalContainer) {
+        swalContainer.style.marginTop = '60px';
       }
+    } else {
+      Swal.fire({
+        title: "Tem certeza?",
+        text: "Esta ação não pode ser desfeita",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim, deletar"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          removerProcuradoresSelecionados();
+          Swal.fire({
+            title: "Sucesso",
+            text: "Pautistas deletados da tabela.",
+            icon: "success"
+          });
+        }
+      });
+    }
+  };
+
+  const removerProcuradoresSelecionados = async () => {
+    try {
+      for (let nome of selected) {
+        const item = data.find(d => d.nome === nome);
+        if (item) {
+          await axios.delete(`${baseURL}pautista/${item.id}`); // Use o ID do item
+        }
+      }
+      const novosDados = data.filter(item => !selected.includes(item.nome));
+      setData(novosDados);
+      setSelected([]);
+    } catch (error) {
+      console.error('Erro ao deletar procuradores:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'Erro ao deletar procuradores. Por favor, tente novamente.'
+      });
     }
   };
 
@@ -143,7 +161,7 @@ export const ConsultaPautista = () => {
         <Typography variant="h5" component="div" sx={{ mb: 3 }}>
           Consultar Pautista
         </Typography>
-
+      
         <Box
           sx={{
             display: 'flex',

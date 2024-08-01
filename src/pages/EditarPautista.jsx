@@ -14,6 +14,11 @@ export const EditarPautista =  () => {
         { value: 'INATIVO', label: 'Inativo' }
     ];
 
+    const turnoOptions = [
+        { value: 'MANHA', label: 'Manhã' },
+        { value: 'TARDE', label: 'Tarde' },
+    ];
+
     const handleDateChange = (event) => {
         setSelecionarData(event.target.value);
     };
@@ -24,7 +29,7 @@ export const EditarPautista =  () => {
                 Editar Pautista
             </Typography>
 
-            <Box sx={{ maxWidth: '50%' }}>
+            <Box sx={{ maxWidth: '60%', padding: 2 }}>
                 <form>
                     <div>
                         <TextField
@@ -39,33 +44,14 @@ export const EditarPautista =  () => {
                         />
                     </div>
 
-                    <div>
-                        <TextField
-                            id="status"
-                            name="status"
-                            select
-                            label="Status"
-                            // value={formValues.status}
-                            sx={{ width: '100%', mb: 2 }}
-                            // onChange={(e) => setFormValues({ ...formValues, status: e.target.value })}
-                            required
-                        >
-                         {statusOptions.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem> 
-                             ))}
-                        </TextField>
-                    </div>
-
-                    <div>
-                        <TextField
+                    <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+                    <TextField
                             id="grupo"
                             name="grupo"
                             select
                             label="Grupo"
                             // value={formValues.grupo}
-                            sx={{ width: '100%', mb: 2 }}
+                            sx={{ width: '100%' }}
                             // onChange={(e) => setFormValues({ ...formValues, grupo: e.target.value })}
                             required
                         >
@@ -75,6 +61,42 @@ export const EditarPautista =  () => {
                             </MenuItem> 
                              ))}
                         </TextField>
+
+                        <TextField
+                            id="turno"
+                            name="turno"
+                            select
+                            label="Turno"
+                            // value={formValues.turno}
+                            sx={{ width: '100%'}}
+                            // onChange={(e) => setFormValues({ ...formValues, turno: e.target.value })}
+                            required
+                        >
+                        {turnoOptions.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                        </TextField>
+
+                        <TextField
+                            id="status"
+                            name="status"
+                            select
+                            label="Status"
+                            // value={formValues.status}
+                            sx={{ width: '100%' }}
+                            // onChange={(e) => setFormValues({ ...formValues, status: e.target.value })}
+                            required
+                        >
+                         {statusOptions.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem> 
+                             ))}
+                        </TextField>
+
+                        
                     </div>
 
                     <div>
