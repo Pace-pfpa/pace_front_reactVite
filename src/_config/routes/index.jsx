@@ -10,6 +10,7 @@ import { ConsultaEscala } from '../../pages/ConsultaEscala';
 import { MainLayout } from './MainLayout';
 import { EditarPautista } from '../../pages/EditarPautista';
 import { EditarAdvogado } from '../../pages/EditarAdvogado';
+import { EscalaGerar } from '../../pages/EscalaGerar';
 
 export const AppRouter = () => {
     return (
@@ -17,6 +18,7 @@ export const AppRouter = () => {
             <Routes>
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<Home />} />
+                    <Route path="escala-gerar" element={<EscalaGerar />} />
                     <Route path="cadastro-pautista" element={<CadastroPautista />} />
                     <Route path="cadastro-advogado" element={<CadastroAdvogado />} />
                     <Route path="cadastro-pauta" element={<CadastroPauta />} />

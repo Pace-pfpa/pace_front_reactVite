@@ -63,7 +63,7 @@ export const Sidebar = () => {
           </List>
           <Divider />
           <List>
-            {['Cadastrar', 'Consultar', 'Mutirão'].map((text) => (
+            {['Escala','Cadastrar', 'Consultar', 'Mutirão'].map((text) => (
               <React.Fragment key={text}>
                 <ListItem disablePadding>
                   <ListItemButton
@@ -84,6 +84,18 @@ export const Sidebar = () => {
                     {openItems[text] ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
                 </ListItem>
+                {text === 'Escala' && (
+                  <Collapse in={openItems[text]} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/escala-gerar')}>
+                        <ListItemText primary="Gerar"/>
+                      </ListItemButton>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/escala-avaliar')}>
+                        <ListItemText primary="Analisar"/>
+                      </ListItemButton>
+                    </List>
+                  </Collapse>
+                )}
                 {text === 'Cadastrar' && (
                   <Collapse in={openItems[text]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
