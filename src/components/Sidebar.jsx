@@ -90,9 +90,6 @@ export const Sidebar = () => {
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/escala-gerar')}>
                         <ListItemText primary="Gerar"/>
                       </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation('/escala-avaliar')}>
-                        <ListItemText primary="Analisar"/>
-                      </ListItemButton>
                     </List>
                   </Collapse>
                 )}
