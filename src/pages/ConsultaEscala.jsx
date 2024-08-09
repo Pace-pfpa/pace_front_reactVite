@@ -216,7 +216,6 @@ export const ConsultaEscala = () => {
         <TabelaDeAudiencias
           data={data}
           enableRowSelection={true}
-          // Passar outros props se necessário
         />
       </Box>
     </>

@@ -2,10 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Box, Card, CardContent, Typography, TextField, MenuItem, Button, Tabs, Tab } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import SearchIcon from '@mui/icons-material/Send';
 import AddIcon from '@mui/icons-material/Add';
+import CircularProgress from '@mui/material/CircularProgress';
 import { api_axios_getMutirao } from "../API/api_axios_getMutirao";
+import { VITE_API_URL_DEV } from "../_config";
 import { gerarEscala } from "../services/GerarEscala";
+import axios from "axios";
 import Swal from "sweetalert2";
+
+const turnoOptions = [
+    { value: 'TODOS', label: 'Todos' },
+    { value: 'MANHA', label: 'Manhã' },
+    { value: 'TARDE', label: 'Tarde' },
+];
+
+const statusOptions = [
+    { value:'Não Cadastrada', label:'Não cadastrada'},
+    { value:'Cadastrada' , label: 'Cadastrada'},
+    { value:'Todos' , label: 'Todos'}
+]
 
 const grupoOptions = [
     { value: 'TODOS', label: 'Todos' },
@@ -27,10 +43,9 @@ export const EscalaGerar = () => {
     const [message, setMessage] = useState("")
     const [loading, setLoading] = useState(false)
     const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
-    const maxFileNameLength = 50;
+    const maxFileNameLength = 78;
 
-    const ipDev = import.meta.env.VITE_API_URL_DEV;
-    console.log(ipdev)
+    const ipdev = VITE_API_URL_DEV;
 
     const handleTabChange = (event, newValue) => {
         if (newValue === 1 && !isPasswordCorrect) {
@@ -62,7 +77,7 @@ export const EscalaGerar = () => {
     const onFileUpload = async () => {
         if (selectedFile) {
             const formData = new FormData()
-            formData.append('file', file)
+            formData.append('file', selectedFile)
 
             setLoading(true);
             setMessage('');
@@ -74,10 +89,37 @@ export const EscalaGerar = () => {
                           'Content-Type': 'multipart/form-data',
                         },
                     });
-                    setMessage(`File uploaded successfully: ${JSON.stringify(response.data)}`);
+                    Swal.fire({
+                        title: "Sucesso!",
+                        text: "Audiência(s) adicionada(s)!",
+                        icon: "success"
+                    });
                     setDownloadAvailable(true);
             } catch (error) {
-                setMessage(`Failed to upload file: ${error.response ? error.response.data.error : error.message}`);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    },
+                    customClass: {
+                        container: 'swal-container'
+                    }
+                });
+                Toast.fire({
+                    icon: "error",
+                    title: "Erro ao adicionar arquivo"
+                });
+    
+                const swalContainer = document.querySelector('.swal-container');
+                if (swalContainer) {
+                    swalContainer.style.marginTop = '60px';
+                }
+                setMessage(`${error.response ? error.response.data.error : error.message}`);
             } finally {
                 setLoading(false);
             }
@@ -223,90 +265,123 @@ export const EscalaGerar = () => {
             </Tabs>
         </Box>
         {tabValue === 0 && (
-            <Box>
-            <Typography variant="h5" component="div" sx={{ mb: 3 }}>
-                Gerar Escala
-            </Typography>
-
-            <Box sx={{ maxWidth: '600px' }}>
-                <form onSubmit={(e) => e.preventDefault()}>
-                    <div>
+                <>
+                  <Box sx={{ maxWidth: '60%', padding: 2 }}>
+                    <form>
+                      <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
                         <TextField
-                            id="vara"
-                            name="vara"
-                            select
-                            label="Vara"
-                            value={vara}
-                            onChange={(e) => setVara(e.target.value)}
-                            sx={{ width: '100%', mb: 2 }}
-                            required
-                        >
-                            {varas.map((vara, index) => (
-                                <MenuItem key={index} value={vara}>
-                                    {vara}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </div>
-
-                    <div>
+                          id="data-inicial"
+                          name="dataInicial"
+                          label="Data Inicial"
+                          type="date"
+                          InputLabelProps={{ shrink: true }}
+                          sx={{ flex: 1 }}
+                        //   value={formValues.dataInicial}
+                        //   onChange={(e) => setFormValues({ ...formValues, dataInicial: e.target.value })}
+                          required
+                        />
+            
                         <TextField
-                            id="periodoMutirao"
-                            name="periodoMutirao"
-                            select
-                            label="Período do Mutirão"
-                            value={selectedPeriodo}
-                            onChange={(e) => setSelectedPeriodo(e.target.value)}
-                            sx={{ width: '100%', mb: 2 }}
-                            required
-                        >
-                            {periodoMutiraoOptions.map(option => (
-                                <MenuItem key={option.id} value={option.periodo}>
-                                    {option.periodo}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </div>
-
-                    <div>
-                        <TextField
-                            id="grupo"
-                            name="grupo"
-                            select
-                            label="Grupo"
-                            value={grupo}
-                            sx={{ width: '100%', mb: 2 }}
-                            onChange={(e) => setGrupo(e.target.value)}
-                            required
-                        >
-                            {grupoOptions.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </div>
-
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
-                        <Button
-                            type="button"
-                            variant="outlined"
-                            onClick={limparCampos}
-                            className='clearButton'>
-                            Limpar
+                          id="data-final"
+                          name="dataFinal"
+                          label="Data Final"
+                          type="date"
+                          InputLabelProps={{ shrink: true }}
+                          sx={{ flex: 1 }}
+                        //   value={formValues.dataFinal}
+                        //   onChange={(e) => setFormValues({ ...formValues, dataFinal: e.target.value })}
+                          required
+                        />
+                      </div>
+            
+                      <TextField
+                        id="turno"
+                        name="turno"
+                        select
+                        label="Turno"
+                        // value={formValues.turno}
+                        // onChange={(e) => setFormValues({ ...formValues, turno: e.target.value })}
+                        sx={{ width: '100%', mb: 2 }}
+                        required
+                      >
+                        {turnoOptions.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+            
+                      <TextField
+                        id="vara"
+                        name="vara"
+                        select
+                        label="Vara"
+                        // value={formValues.vara}
+                        // onChange={(e) => setFormValues({ ...formValues, vara: e.target.value })}
+                        sx={{ width: '100%', mb: 2 }}
+                        required
+                      >
+                        {/* {varaOptions.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))} */}
+                      </TextField>
+            
+                      <TextField
+                        id="sala"
+                        name="sala"
+                        label="Sala"
+                        variant="outlined"
+                        sx={{ width: '100%', mb: 2 }}
+                        // value={formValues.sala}
+                        // onChange={(e) => setFormValues({ ...formValues, sala: e.target.value })}
+                      />
+            
+                      <TextField
+                        id="statusTarefa"
+                        name="statusTarefa"
+                        select
+                        label="Status Tarefa Sapiens"
+                        // value={formValues.statusTarefa}
+                        // onChange={(e) => setFormValues({ ...formValues, statusTarefa: e.target.value })}
+                        sx={{ width: '100%', mb: 2 }}
+                        required
+                      >
+                        {statusOptions.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+            
+                      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                        <Button 
+                          type="button" 
+                          variant="outlined" 
+                          onClick={limparCampos} 
+                          className='clearButton'>
+                          Limpar
                         </Button>
-
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            endIcon={<SendIcon />}
-                            className='sendButton' sx={{ ml: 1 }}>
-                            Cadastrar
+            
+                        <Button 
+                          type="submit" 
+                          variant="contained" 
+                          endIcon={<SearchIcon />} 
+                          className='sendButton' sx={{ ml: 1 }}>
+                          Pesquisar
                         </Button>
-                    </Box>
-                </form>
-            </Box>
-        </Box>
+                      </Box>
+                    </form>
+                  </Box>
+            
+                  <Box sx={{ marginTop: 3 }}>
+                    {/* <TabelaDeAudiencias
+                      data={data}
+                      enableRowSelection={true}
+                    /> */}
+                  </Box>
+                </>
         )}
         {tabValue === 1 && isPasswordCorrect &&(
             <Box display="flex" justifyContent="center">
@@ -344,12 +419,11 @@ export const EscalaGerar = () => {
                       sx={{ mt: 2 }}
                       disabled={loading}
                       onClick={onFileUpload}
-                      startIcon={<AddIcon />}
+                      startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <AddIcon />}
                     >
-                      {loading ? 'Carregando...' : 'Adicionar'}
+                      {loading ? 'Adicionando...' : 'Adicionar'}
                     </Button>
-                    {loading && <p>Extraindo...</p>}
-                    {message && <p>{message}</p>}
+                    {loading && <p>Aguarde um momento</p>}
                   </Box>
                 </CardContent>
               </Card>
