@@ -1,22 +1,7 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TextField, MenuItem, Button } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Send';
-import axios from 'axios';
+import SearchIcon from '@mui/icons-material/Search';
 import TabelaEscalaAvaliar from '../components/TabelaEscalaAvaliar';
-
-const turnoOptions = [
-  { value: 'TODOS', label: 'Todos' },
-  { value: 'MANHA', label: 'Manhã' },
-  { value: 'TARDE', label: 'Tarde' },
-];
-
-const statusOptions = [
-  { value: 'Não Cadastrada', label: 'Não cadastrada' },
-  { value: 'Cadastrada', label: 'Cadastrada' },
-  { value: 'Todos', label: 'Todos' }
-];
-
-const ipdev = import.meta.env.VITE_API_URL_DEV;
 
 export const EscalaAnalisar = () => {
   const [formValues, setFormValues] = useState({
@@ -24,34 +9,42 @@ export const EscalaAnalisar = () => {
     dataFinal: '',
     turno: '',
     vara: '',
-    sala: '',
-    statusTarefa: '',
+    sala: ''
   });
 
   const [data, setData] = useState([]);
 
-  const handleChange = (e) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.value,
-    });
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const url = 'http://localhost:3000/audiencias-filter';
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
 
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(`${ipdev}/audiencias-filter`, {
-        params: formValues,
-      });
-      console.log('resposa da apiii:', response); 
-      if (response.data && Array.isArray(response.data)) {
-        setData(response.data);
-      } else {
-        console.error('API response is not an array:', response.data);
-        setData([]);
+        if (!response.ok) {
+          throw new Error('Erro ao buscar dados');
+        }
+
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value
+    }));
   };
 
   const limparCampos = () => {
@@ -60,11 +53,42 @@ export const EscalaAnalisar = () => {
       dataFinal: '',
       turno: '',
       vara: '',
-      sala: '',
-      statusTarefa: '',
+      sala: ''
     });
-    setData([]);
   };
+
+  const handleSearch = async () => {
+    try {
+      const url = 'http://localhost:3000/audiencias-filter';
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao buscar dados');
+      }
+
+      const result = await response.json();
+      setData(result);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const turnoOptions = [
+    { value: '', label: 'Todos' },
+    { value: 'MANHÃ', label: 'Manhã' },
+    { value: 'TARDE', label: 'Tarde' }
+  ];
+
+  const varaOptions = [
+    { value: '', label: 'Todas' },
+    { value: 'Juizado Especial Cível e Criminal', label: 'Juizado Especial Cível e Criminal' },
+    { value: 'Vara2', label: 'Vara 2' }
+  ];
 
   return (
     <>
@@ -104,7 +128,7 @@ export const EscalaAnalisar = () => {
             value={formValues.turno}
             onChange={handleChange}
             sx={{ width: '100%', mb: 2 }}
-            
+            required
           >
             {turnoOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -121,8 +145,13 @@ export const EscalaAnalisar = () => {
             value={formValues.vara}
             onChange={handleChange}
             sx={{ width: '100%', mb: 2 }}
-            
+            required
           >
+            {varaOptions.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
           </TextField>
 
           <TextField

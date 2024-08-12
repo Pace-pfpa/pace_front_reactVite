@@ -1,87 +1,187 @@
-import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
+import React from 'react';
+import PropTypes from 'prop-types';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Checkbox } from '@mui/material';
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
-const columns = [
-  { id: 'data', label: 'Data', minWidth: 170 },
-  { id: 'hora', label: 'Hora', minWidth: 100 },
-  { id: 'processo', label: 'Processo', minWidth: 170 },
-  { id: 'orgao_julgador', label: 'Órgão Julgador', minWidth: 170 },
-  { id: 'partes', label: 'Partes', minWidth: 170 },
-  { id: 'classe', label: 'Classe', minWidth: 170 },
-  { id: 'tipo_audiencia', label: 'Tipo de Audiência', minWidth: 170 },
-  { id: 'sala', label: 'Sala', minWidth: 170 },
-  { id: 'situacao', label: 'Situação', minWidth: 170 },
+const headCells = [
+  { id: 'data', numeric: false, disablePadding: false, label: 'Data' },
+  { id: 'hora', numeric: false, disablePadding: false, label: 'Hora' },
+  { id: 'processo', numeric: false, disablePadding: false, label: 'Processo' },
+  { id: 'orgao_julgador', numeric: false, disablePadding: false, label: 'Órgão Julgador' },
+  { id: 'partes', numeric: false, disablePadding: false, label: 'Partes' },
+  { id: 'classe', numeric: false, disablePadding: false, label: 'Classe' },
+  { id: 'tipo_audiencia', numeric: false, disablePadding: false, label: 'Tipo de Audiência' },
+  { id: 'sala', numeric: false, disablePadding: false, label: 'Sala' },
+  { id: 'situacao', numeric: false, disablePadding: false, label: 'Situação' },
 ];
 
-export default function TabelaEscalaAvaliar({ data }) {
+export const TabelaEscalaAvaliar = ({ data }) => {
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('data');
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [selected, setSelected] = React.useState([]);
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
+    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  // Verificar se data é um array
-  const validData = Array.isArray(data) ? data : [];
+  const formatDate = (dateString) => {
+    // Print the date string for debugging
+    console.log('Date String:', dateString);
+
+    // Parse the date string assuming it's in ISO format
+    const date = parseISO(dateString);
+
+    // Check for invalid date
+    if (isNaN(date.getTime())) {
+      console.error('Invalid date:', dateString);
+      return dateString;
+    }
+
+    // Format the date to 'dd/MM/yyyy'
+    return format(date, 'dd/MM/yyyy', { locale: ptBR });
+  };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelected = data.map((row) => row.id);
+      setSelected(newSelected);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+    setSelected(newSelected);
+  };
+
+  const isSelected = (id) => selected.indexOf(id) !== -1;
+
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ top: 57, minWidth: column.minWidth }}
-                >
-                  {column.label}
+    <Box sx={{ width: '100%' }}>
+      <Paper sx={{ width: '100%', mb: 2 }}>
+        <TableContainer>
+          <Table sx={{ minWidth: 750 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    color="primary"
+                    indeterminate={selected.length > 0 && selected.length < data.length}
+                    checked={data.length > 0 && selected.length === data.length}
+                    onChange={handleSelectAllClick}
+                    inputProps={{ 'aria-label': 'select all rows' }}
+                  />
                 </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {validData
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number'
-                          ? column.format(value)
-                          : value}
-                      </TableCell>
-                    );
-                  })}
+                {headCells.map((headCell) => (
+                  <TableCell
+                    key={headCell.id}
+                    align={headCell.numeric ? 'right' : 'left'}
+                    padding={headCell.disablePadding ? 'none' : 'normal'}
+                    sortDirection={orderBy === headCell.id ? order : false}
+                  >
+                    <TableSortLabel
+                      active={orderBy === headCell.id}
+                      direction={orderBy === headCell.id ? order : 'asc'}
+                      onClick={(event) => handleRequestSort(event, headCell.id)}
+                    >
+                      {headCell.label}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                const isItemSelected = isSelected(row.id);
+                const labelId = `enhanced-table-checkbox-${index}`;
+
+                return (
+                  <TableRow
+                    hover
+                    onClick={(event) => handleClick(event, row.id)}
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row.id}
+                    selected={isItemSelected}
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{ 'aria-labelledby': labelId }}
+                      />
+                    </TableCell>
+                    <TableCell>{formatDate(row.data)}</TableCell>
+                    <TableCell>{row.hora}</TableCell>
+                    <TableCell>{row.processo}</TableCell>
+                    <TableCell>{row.orgao_julgador}</TableCell>
+                    <TableCell>{row.partes}</TableCell>
+                    <TableCell>{row.classe}</TableCell>
+                    <TableCell>{row.tipo_audiencia}</TableCell>
+                    <TableCell>{row.sala}</TableCell>
+                    <TableCell>{row.situacao}</TableCell>
+                  </TableRow>
+                );
+              })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={headCells.length + 1} />
                 </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={validData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </Box>
   );
-}
+};
+
+TabelaEscalaAvaliar.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+export default TabelaEscalaAvaliar;
