@@ -11,7 +11,6 @@ import { MainLayout } from './MainLayout';
 import { EditarPautista } from '../../pages/EditarPautista';
 import { EditarAdvogado } from '../../pages/EditarAdvogado';
 import { EscalaGerar } from '../../pages/EscalaGerar';
-import { EscalaAnalisar} from '../../pages/EscalaAnalisar'
 
 export const AppRouter = () => {
     return (
@@ -20,7 +19,6 @@ export const AppRouter = () => {
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<Home />} />
                     <Route path="escala-gerar" element={<EscalaGerar />} />
-                    <Route path="escala-analisar" element={<EscalaAnalisar />} />
                     <Route path="cadastro-pautista" element={<CadastroPautista />} />
                     <Route path="cadastro-advogado" element={<CadastroAdvogado />} />
                     <Route path="cadastro-pauta" element={<CadastroPauta />} />

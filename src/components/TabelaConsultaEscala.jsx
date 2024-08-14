@@ -8,11 +8,11 @@ import { ptBR } from 'date-fns/locale';
 const headCells = [
   { id: 'data', numeric: false, disablePadding: false, label: 'Data' },
   { id: 'hora', numeric: false, disablePadding: false, label: 'Hora' },
+  { id: 'turno', numeric: false, disablePadding: false, label: 'Turno'},
   { id: 'processo', numeric: false, disablePadding: false, label: 'Processo' },
+  // { id: 'tipo', numeric: false, disablePadding: false, label: 'Contestação' },
   { id: 'orgao_julgador', numeric: false, disablePadding: false, label: 'Órgão Julgador' },
   { id: 'partes', numeric: false, disablePadding: false, label: 'Partes' },
-  { id: 'classe', numeric: false, disablePadding: false, label: 'Classe' },
-  { id: 'tipo_audiencia', numeric: false, disablePadding: false, label: 'Tipo de Audiência' },
   { id: 'sala', numeric: false, disablePadding: false, label: 'Sala' },
   { id: 'situacao', numeric: false, disablePadding: false, label: 'Situação' },
 ];
@@ -40,28 +40,23 @@ export const TabelaEscalaAvaliar = ({ data }) => {
   };
 
   const formatDate = (dateString) => {
-    // Print the date string for debugging
-    console.log('Date String:', dateString);
-
-    // Parse the date string assuming it's in ISO format
     const date = parseISO(dateString);
 
-    // Check for invalid date
+
     if (isNaN(date.getTime())) {
-      console.error('Invalid date:', dateString);
       return dateString;
     }
-
-    // Format the date to 'dd/MM/yyyy'
     return format(date, 'dd/MM/yyyy', { locale: ptBR });
   };
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = data.map((row) => row.id);
+      console.log("aaaa1",newSelected)
       setSelected(newSelected);
       return;
     }
+    console.log("aaaa2")
     setSelected([]);
   };
 
@@ -71,11 +66,15 @@ export const TabelaEscalaAvaliar = ({ data }) => {
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
+      console.log("newSelected primeiro if", newSelected)
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
+      console.log("newSelected segundo if", newSelected)
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
+      console.log("newSelected terceiro if", newSelected)
     } else if (selectedIndex > 0) {
+      console.log("newSelected quarto if", newSelected)
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1),
@@ -148,11 +147,11 @@ export const TabelaEscalaAvaliar = ({ data }) => {
                     </TableCell>
                     <TableCell>{formatDate(row.data)}</TableCell>
                     <TableCell>{row.hora}</TableCell>
+                    <TableCell>{row.turno}</TableCell>
                     <TableCell>{row.processo}</TableCell>
+                    {/* <TableCell>{row.tipo}</TableCell> */}
                     <TableCell>{row.orgao_julgador}</TableCell>
                     <TableCell>{row.partes}</TableCell>
-                    <TableCell>{row.classe}</TableCell>
-                    <TableCell>{row.tipo_audiencia}</TableCell>
                     <TableCell>{row.sala}</TableCell>
                     <TableCell>{row.situacao}</TableCell>
                   </TableRow>
