@@ -50,7 +50,7 @@ export const EscalaGerar = () => {
     const handleTabChange = (event, newValue) => {
         if (newValue === 1 && !isPasswordCorrect) {
           Swal.fire({
-            title: 'Digite a senha',
+            text: 'Digite a senha:',
             input: 'password',
             inputPlaceholder: 'Digite a senha',
             showCancelButton: true,
